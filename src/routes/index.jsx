@@ -1,23 +1,25 @@
-// import { AppContext } from "@/context/store";
-// import { IsUserAuthenticated } from "@/context/user/action.js";
 import pagesData from "@/routes/pagesData";
-// import { useContext } from "react";
-// import { ForbidAuth, RequireAuth } from "./AuthRedirects";
 import { Route, Routes } from "react-router";
-const AppRoutes = () => {
-  // const { dispatch } = useContext(AppContext);
-  // const isAuthenticated = dispatch(IsUserAuthenticated());
 
-  const pageRoutes = pagesData.map((page) =>
-    page.map(({ path, title, element, isProtected, isAuth }) => {
-      // if (isProtected && !isAuthenticated) {
-      //   element = <RequireAuth />;
-      // }
-      // if (isAuth && isAuthenticated) {
-      //   element = <ForbidAuth />;
-      // }
-      return <Route key={title} path={`/${path}`} element={element} />;
-    })
+const AppRoutes = () => {
+  const pageRoutes = pagesData.flatMap((pageGroup) =>
+    pageGroup.flatMap(
+      ({ path, title, element, isProtected, isAuth, submenu }) => {
+        // ایجاد مسیرهای اصلی
+        const mainRoute = <Route key={path} path={path} element={element} />;
+
+        // ایجاد مسیرهای زیرمنو (submenu)
+        const submenuRoutes = submenu
+          ? submenu.map(
+              ({ path: subPath, title: subTitle, element: subElement }) => (
+                <Route key={subPath} path={subPath} element={subElement} />
+              )
+            )
+          : [];
+
+        return [mainRoute, ...submenuRoutes];
+      }
+    )
   );
 
   return <Routes>{pageRoutes}</Routes>;

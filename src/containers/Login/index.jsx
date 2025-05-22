@@ -17,7 +17,6 @@ function Login(props) {
 
   const submitForm = (e) => {
     e.preventDefault();
-    console.log(props.signOut());
     // setErrorMessage("");
 
     // if (loginObj.emailId.trim() === "")
@@ -29,7 +28,7 @@ function Login(props) {
     //   // Call API to check user credentials and save token in localstorage
     //   localStorage.setItem("token", "DumyTokenHere");
     //   setLoading(false);
-    //   window.location.href = "/app/welcome";
+    window.location.href = "/";
     // }
   };
 
