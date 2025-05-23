@@ -25,14 +25,14 @@ export const HomePagesData = [
   {
     path: "/",
     icon: <Squares2X2Icon className={iconClasses} />,
-    title: "Home",
+    title: "خانه",
     element: <HomeLayout children={<>hi</>} />,
     isAuth: true,
   },
   {
     path: "/setting",
     icon: <AdjustmentsHorizontalIcon className={iconClasses} />,
-    title: "Setting",
+    title: "تنظیمات",
     submenu: [
       {
         path: "/setting/aa",
@@ -46,7 +46,7 @@ export const HomePagesData = [
 const NotFoundPageData = [
   {
     path: "*",
-    title: "Not Found",
+    title: "یافت نشد",
     element: <NotFoundPage />,
   },
 ];

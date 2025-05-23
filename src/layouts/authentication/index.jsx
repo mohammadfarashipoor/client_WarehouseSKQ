@@ -3,17 +3,19 @@ function AuthLayout({ children }) {
     <div className="min-h-screen bg-base-200 flex items-center">
       <div className="card mx-auto w-full max-w-5xl  shadow-xl">
         <div className="grid  md:grid-cols-2 grid-cols-1  bg-base-100 rounded-xl">
-          <div className="">
+          {children}
+
+          <div className="hidden md:block">
             <div className="hero min-h-full rounded-l-xl bg-base-200">
               <div className="hero-content py-12">
                 <div className="max-w-md">
                   <h1 className="text-3xl text-center font-bold ">
                     <img
                       src="/logo192.png"
-                      className="w-12 inline-block mr-2 mask mask-circle"
+                      className="w-12 inline-block ml-2 mask mask-circle"
                       alt="dashwind-logo"
                     />
-                    DashWind
+                    سنگ کاغذ قیچی
                   </h1>
 
                   <div className="text-center mt-12">
@@ -48,7 +50,6 @@ function AuthLayout({ children }) {
               </div>
             </div>
           </div>
-          {children}
         </div>
       </div>
     </div>

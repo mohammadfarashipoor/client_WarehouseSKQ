@@ -5,21 +5,11 @@ import { HomePagesData as routes } from "@/routes/pagesData";
 
 function Menu() {
   const location = useLocation();
-  const close = (e) => {
-    document.getElementById("left-sidebar-drawer").click();
-  };
 
   return (
     <div className="drawer-side  z-30  ">
       <label htmlFor="left-sidebar-drawer" className="drawer-overlay"></label>
       <ul className="menu  pt-2 w-80 bg-base-100 min-h-full   text-base-content">
-        <button
-          className="btn btn-ghost bg-base-300  btn-circle z-50 top-0 right-0 mt-4 mr-2 absolute lg:hidden"
-          onClick={() => close()}
-        >
-          <XMarkIcon className="h-5 inline-block w-5" />
-        </button>
-
         <li className="mb-2 font-semibold text-xl">
           <Link to={"/app/welcome"}>
             <img
@@ -27,8 +17,8 @@ function Menu() {
               src="/logo192.png"
               alt="DashWind Logo"
             />
-            DashWind
-          </Link>{" "}
+            سنگ کاغذ قیچی
+          </Link>
         </li>
         {routes.map((route, k) => {
           return (

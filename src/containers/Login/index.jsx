@@ -20,7 +20,7 @@ function Login(props) {
   };
   return (
     <div className="py-24 px-10">
-      <h2 className="text-2xl font-semibold mb-2 text-center">Login</h2>
+      <h2 className="text-2xl font-semibold mb-2 text-center">ورود</h2>
       <form onSubmit={handleSubmit} noValidate>
         <div className="mb-4">
           <InputText
@@ -59,14 +59,14 @@ function Login(props) {
             "btn mt-2 w-full btn-primary" + (isLoading ? " loading" : "")
           }
         >
-          Login
+          ورود
         </button>
 
         <div className="text-center mt-4">
-          Don't have an account yet?{" "}
+          آیا هنوز حساب کاربری ندارید؟
           <Link to="/register">
             <span className="  inline-block  hover:text-primary hover:underline hover:cursor-pointer transition duration-200">
-              Register
+              ثبت نام
             </span>
           </Link>
         </div>

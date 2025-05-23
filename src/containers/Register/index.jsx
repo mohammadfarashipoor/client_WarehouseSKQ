@@ -21,7 +21,7 @@ function Register(props) {
 
   return (
     <div className="py-24 px-10">
-      <h2 className="text-2xl font-semibold mb-2 text-center">Register</h2>
+      <h2 className="text-2xl font-semibold mb-2 text-center">ثبت نام</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <InputText
@@ -71,14 +71,14 @@ function Register(props) {
             "btn mt-2 w-full btn-primary" + (isLoading ? " loading" : "")
           }
         >
-          Register
+          ثبت نام
         </button>
 
         <div className="text-center mt-4">
-          Already have an account?
+          حساب کاربری دارید؟
           <Link to="/login">
             <span className="  inline-block  hover:text-primary hover:underline hover:cursor-pointer transition duration-200">
-              Login
+              ورود
             </span>
           </Link>
         </div>
