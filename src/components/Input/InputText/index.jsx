@@ -1,36 +1,43 @@
-import { useState } from "react";
+import ErrorText from "../../Typography/ErrorText";
 
 function InputText({
-  labelTitle,
+  label,
   labelStyle,
+  value,
+  name,
   type,
   containerStyle,
-  defaultValue,
   placeholder,
-  updateFormValue,
-  updateType,
+  disableValue,
+  error,
+  onInputChange,
 }) {
-  const [value, setValue] = useState(defaultValue);
-
-  const updateInputValue = (val) => {
-    setValue(val);
-    updateFormValue({ updateType, value: val });
+  const _onChange = (e) => {
+    if (e.target.name == "image") {
+      onInputChange(e.target.name, e.target.files[0]);
+    } else {
+      onInputChange(e.target.name, e.target.value);
+    }
   };
-
   return (
     <div className={`form-control w-full ${containerStyle}`}>
       <label className="label">
         <span className={"label-text text-base-content " + labelStyle}>
-          {labelTitle}
+          {label}
         </span>
       </label>
       <input
         type={type || "text"}
         value={value}
+        name={name}
+        disabled={disableValue}
         placeholder={placeholder || ""}
-        onChange={(e) => updateInputValue(e.target.value)}
-        className="input  input-bordered w-full "
+        onChange={(e) => {
+          _onChange(e);
+        }}
+        className={`input input-bordered w-full `}
       />
+      <ErrorText className="text-error">{error && error[0]}</ErrorText>
     </div>
   );
 }

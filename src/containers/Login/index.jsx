@@ -1,71 +1,62 @@
-import { useState, useRef } from "react";
-import { Link } from "react-router-dom";
-import ErrorText from "@/components/Typography/ErrorText";
 import InputText from "@/components/Input/InputText";
 import { connect } from "react-redux";
 import actions from "@/context/actions";
+import { Link, Navigate } from "react-router";
 
 function Login(props) {
-  const INITIAL_LOGIN_OBJ = {
-    password: "",
-    emailId: "",
+  const {
+    authenticated,
+    loginFormData,
+    loginChange,
+    login,
+    formErrors,
+    isLoading,
+    isSubmitting,
+  } = props;
+  if (authenticated) return <Navigate to="/" />;
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    login();
   };
-
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [loginObj, setLoginObj] = useState(INITIAL_LOGIN_OBJ);
-
-  const submitForm = (e) => {
-    e.preventDefault();
-    // setErrorMessage("");
-
-    // if (loginObj.emailId.trim() === "")
-    //   return setErrorMessage("Email Id is required! (use any value)");
-    // if (loginObj.password.trim() === "")
-    //   return setErrorMessage("Password is required! (use any value)");
-    // else {
-    //   setLoading(true);
-    //   // Call API to check user credentials and save token in localstorage
-    //   localStorage.setItem("token", "DumyTokenHere");
-    //   setLoading(false);
-    window.location.href = "/";
-    // }
-  };
-
-  const updateFormValue = ({ updateType, value }) => {
-    setErrorMessage("");
-    setLoginObj({ ...loginObj, [updateType]: value });
-  };
-
   return (
     <div className="py-24 px-10">
       <h2 className="text-2xl font-semibold mb-2 text-center">Login</h2>
-      <form onSubmit={(e) => submitForm(e)}>
+      <form onSubmit={handleSubmit} noValidate>
         <div className="mb-4">
           <InputText
             type="emailId"
-            defaultValue={loginObj.emailId}
-            updateType="emailId"
+            error={formErrors["email"]}
+            placeholder={"لطفا ایمیل خود را وارد کنید"}
+            name={"email"}
             containerStyle="mt-4"
-            labelTitle="Email Id"
-            updateFormValue={updateFormValue}
+            label={"ایمیل"}
+            value={loginFormData.email}
+            onInputChange={(name, value) => {
+              loginChange(name, value);
+            }}
+            disableValue={isSubmitting}
           />
 
           <InputText
-            defaultValue={loginObj.password}
             type="password"
-            updateType="password"
+            error={formErrors["password"]}
+            placeholder={"لطفا رمز عبور خود را وارد کنید"}
+            name={"password"}
             containerStyle="mt-4"
-            labelTitle="Password"
-            updateFormValue={updateFormValue}
+            label={"رمز عبور"}
+            value={loginFormData.password}
+            onInputChange={(name, value) => {
+              loginChange(name, value);
+            }}
+            disableValue={isSubmitting}
           />
         </div>
 
-        <ErrorText styleClass="mt-8">{errorMessage}</ErrorText>
         <button
           type="submit"
+          disabled={isSubmitting}
           className={
-            "btn mt-2 w-full btn-primary" + (loading ? " loading" : "")
+            "btn mt-2 w-full btn-primary" + (isLoading ? " loading" : "")
           }
         >
           Login
@@ -85,6 +76,7 @@ function Login(props) {
 }
 const mapStateToProps = (state) => {
   return {
+    authenticated: state.authentication.authenticated,
     loginFormData: state.login.loginFormData,
     formErrors: state.login.formErrors,
     isLoading: state.login.isLoading,

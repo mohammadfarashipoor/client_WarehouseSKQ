@@ -1,78 +1,74 @@
-import { useState, useRef } from "react";
-import { Link } from "react-router-dom";
-import ErrorText from "@/components/Typography/ErrorText";
 import InputText from "@/components/Input/InputText";
+import actions from "@/context/actions";
+import { connect } from "react-redux";
+import { Link, Navigate } from "react-router";
+function Register(props) {
+  const {
+    authenticated,
+    signupFormData,
+    formErrors,
+    isLoading,
+    isSubmitting,
+    signupChange,
+    signUp,
+  } = props;
+  if (authenticated) return <Navigate to="/" />;
 
-function Register() {
-  const INITIAL_REGISTER_OBJ = {
-    name: "",
-    password: "",
-    emailId: "",
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    signUp();
   };
 
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [registerObj, setRegisterObj] = useState(INITIAL_REGISTER_OBJ);
-
-  const submitForm = (e) => {
-    e.preventDefault();
-    setErrorMessage("");
-
-    if (registerObj.name.trim() === "")
-      return setErrorMessage("Name is required! (use any value)");
-    if (registerObj.emailId.trim() === "")
-      return setErrorMessage("Email Id is required! (use any value)");
-    if (registerObj.password.trim() === "")
-      return setErrorMessage("Password is required! (use any value)");
-    else {
-      setLoading(true);
-      // Call API to check user credentials and save token in localstorage
-      localStorage.setItem("token", "DumyTokenHere");
-      setLoading(false);
-      window.location.href = "/app/welcome";
-    }
-  };
-
-  const updateFormValue = ({ updateType, value }) => {
-    setErrorMessage("");
-    setRegisterObj({ ...registerObj, [updateType]: value });
-  };
   return (
     <div className="py-24 px-10">
       <h2 className="text-2xl font-semibold mb-2 text-center">Register</h2>
-      <form onSubmit={(e) => submitForm(e)}>
+      <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <InputText
-            defaultValue={registerObj.name}
-            updateType="name"
+            type={"text"}
+            error={formErrors["name"]}
+            label={"نام"}
             containerStyle="mt-4"
-            labelTitle="Name"
-            updateFormValue={updateFormValue}
+            name={"name"}
+            placeholder={"لطفا نام خود را وارد کنید"}
+            value={signupFormData.name}
+            onInputChange={(name, value) => {
+              signupChange(name, value);
+            }}
           />
 
           <InputText
-            defaultValue={registerObj.emailId}
-            updateType="emailId"
+            type={"emailId"}
+            error={formErrors["email"]}
+            label={"ایمیل"}
             containerStyle="mt-4"
-            labelTitle="Email Id"
-            updateFormValue={updateFormValue}
+            name={"email"}
+            placeholder={"لطفا ایمیل خود را وارد کنید"}
+            value={signupFormData.email}
+            onInputChange={(name, value) => {
+              signupChange(name, value);
+            }}
           />
 
           <InputText
-            defaultValue={registerObj.password}
-            type="password"
-            updateType="password"
+            type={"password"}
+            error={formErrors["password"]}
+            label={"رمز عبور"}
             containerStyle="mt-4"
-            labelTitle="Password"
-            updateFormValue={updateFormValue}
+            name={"password"}
+            placeholder={"لطفا رمز عبور خود را وارد کنید"}
+            value={signupFormData.password}
+            onInputChange={(name, value) => {
+              signupChange(name, value);
+            }}
           />
         </div>
 
-        <ErrorText styleClass="mt-8">{errorMessage}</ErrorText>
         <button
           type="submit"
+          disabled={isSubmitting}
           className={
-            "btn mt-2 w-full btn-primary" + (loading ? " loading" : "")
+            "btn mt-2 w-full btn-primary" + (isLoading ? " loading" : "")
           }
         >
           Register
@@ -90,5 +86,15 @@ function Register() {
     </div>
   );
 }
+const mapStateToProps = (state) => {
+  return {
+    authenticated: state.authentication.authenticated,
+    signupFormData: state.signup.signupFormData,
+    formErrors: state.signup.formErrors,
+    isLoading: state.signup.isLoading,
+    isSubmitting: state.signup.isSubmitting,
+    isSubscribed: state.signup.isSubscribed,
+  };
+};
 
-export default Register;
+export default connect(mapStateToProps, actions)(Register);
