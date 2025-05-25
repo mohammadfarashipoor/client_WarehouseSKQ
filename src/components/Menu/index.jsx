@@ -7,7 +7,7 @@ function Menu() {
   const location = useLocation();
 
   return (
-    <div className="drawer-side  z-30  ">
+    <div className="drawer-side  z-1">
       <label htmlFor="left-sidebar-drawer" className="drawer-overlay"></label>
       <ul className="menu  pt-2 w-80 bg-base-100 min-h-full   text-base-content">
         <li className="mb-2 font-semibold text-xl">
