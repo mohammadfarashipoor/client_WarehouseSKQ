@@ -7,7 +7,7 @@ function Menu() {
   const location = useLocation();
 
   return (
-    <div className="drawer-side  z-1">
+    <div className="drawer-side z-5">
       <label htmlFor="left-sidebar-drawer" className="drawer-overlay"></label>
       <ul className="menu  pt-2 w-80 bg-base-100 min-h-full   text-base-content">
         <li className="mb-2 font-semibold text-xl">
@@ -38,7 +38,7 @@ function Menu() {
                   {route.icon} {route.title}
                   {location.pathname === route.path ? (
                     <span
-                      className="absolute inset-y-0 left-0 w-1 rounded-tr-md rounded-br-md bg-primary "
+                      className="absolute inset-y-0 right-0 w-1 rounded-tr-md rounded-br-md bg-primary "
                       aria-hidden="true"
                     ></span>
                   ) : null}

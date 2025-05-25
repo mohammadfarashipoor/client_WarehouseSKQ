@@ -5,6 +5,8 @@ import AuthLayout from "../layouts/authentication";
 import HomeLayout from "../layouts/HomeLayout";
 import Squares2X2Icon from "@heroicons/react/24/outline/Squares2X2Icon";
 import AdjustmentsHorizontalIcon from "@heroicons/react/24/outline/AdjustmentsHorizontalIcon";
+import { UserIcon, UsersIcon } from "@heroicons/react/24/outline";
+import EmployeeList from "../containers/EmployeeList";
 const iconClasses = `h-6 w-6`;
 const submenuIconClasses = `h-5 w-5`;
 const AuthPagesData = [
@@ -30,15 +32,15 @@ export const HomePagesData = [
     isAuth: true,
   },
   {
-    path: "/setting",
-    icon: <AdjustmentsHorizontalIcon className={iconClasses} />,
-    title: "تنظیمات",
+    path: "/employee",
+    icon: <UserIcon className={iconClasses} />,
+    title: "کارمندان",
     submenu: [
       {
-        path: "/setting/aa",
-        icon: <AdjustmentsHorizontalIcon className={submenuIconClasses} />,
-        title: "aa",
-        element: <HomeLayout children={<>اعاا</>} />,
+        path: "/employee/list",
+        icon: <UsersIcon className={submenuIconClasses} />,
+        title: "لیست کارمندان",
+        element: <HomeLayout children={<EmployeeList />} />,
       },
     ],
   },

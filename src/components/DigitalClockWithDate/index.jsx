@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {DateObject} from "react-multi-date-picker";
+import { DateObject } from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 
@@ -19,7 +19,7 @@ const DigitalClockWithJalali = () => {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
-    hour12: false
+    hour12: false,
   });
 
   // تبدیل تاریخ میلادی به تقویم شمسی با استفاده از DateObject از react-multi-date-picker
@@ -30,13 +30,9 @@ const DigitalClockWithJalali = () => {
   }).format("YYYY/MM/DD");
 
   return (
-    <div className="flex items-center justify-center gap-2 p-3">
-      <div className="">
-        {formattedTime}
-      </div>
-      <div className="">
-        {persianDate}
-      </div>
+    <div className="hidden items-center justify-center gap-2 p-3 sm:flex">
+      <div className="">{formattedTime}</div>
+      <div className="">{persianDate}</div>
     </div>
   );
 };
