@@ -11,6 +11,7 @@ import { signOut } from "@/containers/Login/actions";
 import { useDispatch } from "react-redux";
 import DigitalClockWithJalali from "../DigitalClockWithDate";
 import CalculatorModal from "../CalculatorModal";
+import CalendarWithEvent from "../DataPicker";
 
 function Header() {
   const [currentTheme, setCurrentTheme] = useState(
@@ -49,8 +50,9 @@ function Header() {
       </div>
 
       <div className="flex-none ">
-        <DigitalClockWithJalali/>
-        <CalculatorModal/>
+        <DigitalClockWithJalali />
+        <CalculatorModal />
+        <CalendarWithEvent />
         {/* Light and dark theme selection toogle **/}
         <label className="swap ">
           <input type="checkbox" />
