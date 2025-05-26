@@ -10,12 +10,14 @@ import { combineReducers } from "redux";
 import signupReducer from "@/containers/Register/reducer";
 import loginReducer from "@/containers/Login/reducer";
 import authenticationReducer from "@/containers/Authentication/reducer";
+import employeeReducer from "../containers/EmployeeList/reducer";
 
 const createReducer = () =>
   combineReducers({
     authentication: authenticationReducer,
     signup: signupReducer,
     login: loginReducer,
+    employee: employeeReducer,
   });
 
 export default createReducer;

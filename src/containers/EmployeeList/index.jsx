@@ -1,77 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TitleCard from "@/components/TitleCard";
-import RowEmplyee from "./RowEmployee";
-
-function EmployeeList() {
-  // لیست اولیه کارکنان به صورت state
-  const [employees, setEmployees] = useState([
-    {
-      num: "1",
-      personalCode: "EM123",
-      position: "انباردار",
-      name: "علیرضا",
-      dateStart: "1/6/1404",
-      status: false,
-    },
-    {
-      num: "2",
-      personalCode: "EM124",
-      position: "مدیر",
-      name: "رضا",
-      dateStart: "2/6/1404",
-      status: true,
-    },
-    {
-      num: "3",
-      personalCode: "EM125",
-      position: "کارشناس",
-      name: "سارا",
-      dateStart: "3/6/1404",
-      status: false,
-    },
-  ]);
+import RowEmplyee from "@/components/RowEmplyee"
+import InputText from "@/components/Input/InputText"
+import actions from "@/context/actions";
+import { connect } from "react-redux";
+import InputCheckBox from "../../components/Input/InputCheckBox";
+function EmployeeList(props) {
+  const {
+    newEmployeeFormData,
+    fetchEmployees,
+    formErrors,
+    fetchHandleEmployees,
+    isLoading, newEmployeeChange,
+    isSubmitting,
+    newEmployeeHandle
+  } = props;
 
   // کنترل نمایش مودال افزودن کارمند
   const [showAddModal, setShowAddModal] = useState(false);
-
-  // وضعیت ورودی‌های فرم کارمند جدید
-  const [newEmployee, setNewEmployee] = useState({
-    personalCode: "",
-    name: "",
-    position: "",
-    dateStart: "",
-    status: false,
-  });
-
-  // به‌روزرسانی فیلدهای فرم
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setNewEmployee((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
+  useEffect(() => { fetchHandleEmployees() }, [])
   // ذخیره کارمند جدید و اضافه کردن آن به لیست
   const handleAddNewEmployee = () => {
-    // به صورت ساده می‌توان شماره ردیف (num) را به صورت خودکار افزایش داد.
-    const newNum = (employees.length + 1).toString();
-    const newEmp = {
-      num: newNum,
-      ...newEmployee,
-    };
-    setEmployees([...employees, newEmp]);
-    // ریست کردن فرم
-    setNewEmployee({
-      personalCode: "",
-      name: "",
-      position: "",
-      dateStart: "",
-      status: false,
-    });
-    setShowAddModal(false);
+    newEmployeeHandle()
+    if (formErrors && !formErrors[0]) {
+      setShowAddModal(false);
+    }
   };
-
   return (
     <main className="flex-1 overflow-y-auto bg-base-200 py-4 px-6">
       <TitleCard
@@ -94,7 +48,7 @@ function EmployeeList() {
               </tr>
             </thead>
             <tbody>
-              {employees.map((employee, index) => (
+              {fetchEmployees?.map((employee, index) => (
                 <RowEmplyee key={index} {...employee} />
               ))}
             </tbody>
@@ -115,94 +69,118 @@ function EmployeeList() {
         {/* مودال افزودن کارمند جدید */}
         {showAddModal && (
           <div
-            className="modal modal-open"
+            className="modal modal-open "
             onClick={(e) => {
               if (e.target === e.currentTarget) setShowAddModal(false);
             }}
           >
             <div className="modal-box relative">
               <h3 className="font-bold text-lg mb-4">افزودن کارمند جدید</h3>
-              <div className="form-control mb-3">
-                <label className="label">
-                  <span className="label-text">کد کارمند</span>
-                </label>
-                <input
-                  type="text"
-                  name="personalCode"
-                  value={newEmployee.personalCode}
-                  onChange={handleInputChange}
-                  placeholder="مثلاً EM126"
-                  className="input input-bordered"
-                />
-              </div>
-              <div className="form-control mb-3">
-                <label className="label">
-                  <span className="label-text">نام</span>
-                </label>
-                <input
-                  type="text"
-                  name="name"
-                  value={newEmployee.name}
-                  onChange={handleInputChange}
-                  placeholder="نام کارمند"
-                  className="input input-bordered"
-                />
-              </div>
-              <div className="form-control mb-3">
-                <label className="label">
-                  <span className="label-text">سمت</span>
-                </label>
-                <input
-                  type="text"
-                  name="position"
-                  value={newEmployee.position}
-                  onChange={handleInputChange}
-                  placeholder="مثلاً مدیر"
-                  className="input input-bordered"
-                />
-              </div>
-              <div className="form-control mb-3">
-                <label className="label">
-                  <span className="label-text">تاریخ شروع</span>
-                </label>
-                <input
-                  type="text"
-                  name="dateStart"
-                  value={newEmployee.dateStart}
-                  onChange={handleInputChange}
-                  placeholder="به صورت شمسی مثلاً 1/6/1404"
-                  className="input input-bordered"
-                />
-              </div>
-              <div className="form-control mb-3">
-                <label className="cursor-pointer label">
-                  <span className="label-text">وضعیت فعال</span>
-                  <input
-                    type="checkbox"
-                    name="status"
-                    checked={newEmployee.status}
-                    onChange={handleInputChange}
-                    className="checkbox checkbox-primary"
-                  />
-                </label>
-              </div>
+              <InputText
+                type="text"
+                error={formErrors["peronsalCode"]}
+                placeholder={"کد کارمند"}
+                name={"peronsalCode"}
+                containerStyle="mt-4"
+                label={"کد پرسنلی"}
+                value={newEmployeeFormData.peronsalCode}
+                onInputChange={(name, value) => {
+                  newEmployeeChange(name, value);
+                }}
+                disableValue={isSubmitting}
+              />
+              <InputText
+                type="text"
+                error={formErrors["name"]}
+                placeholder={"نام کارمند"}
+                name={"name"}
+                containerStyle="mt-4"
+                label={"نام"}
+                value={newEmployeeFormData.name}
+                onInputChange={(name, value) => {
+                  newEmployeeChange(name, value);
+                }}
+                disableValue={isSubmitting}
+              />
+              <InputText
+                type="text"
+                error={formErrors["position"]}
+                placeholder={"مثلاً مدیر"}
+                name={"position"}
+                containerStyle="mt-4"
+                label={"سمت"}
+                value={newEmployeeFormData.position}
+                onInputChange={(name, value) => {
+                  newEmployeeChange(name, value);
+                }}
+                disableValue={isSubmitting}
+              />
+              <InputText
+                type="text"
+                error={formErrors["dateStart"]}
+                placeholder={"به صورت شمسی مثلاً 1/6/1404"}
+                name={"dateStart"}
+                containerStyle="mt-4"
+                label={"تاریخ شروع"}
+                value={newEmployeeFormData.dateStart}
+                onInputChange={(name, value) => {
+                  newEmployeeChange(name, value);
+                }}
+                disableValue={isSubmitting}
+              />
+              <InputText
+                type="text"
+                error={formErrors["contractURL"]}
+                name={"contractURL"}
+                containerStyle="mt-4"
+                label={"قرارداد"}
+                value={newEmployeeFormData.contractURL}
+                onInputChange={(name, value) => {
+                  newEmployeeChange(name, value);
+                }}
+                disableValue={isSubmitting}
+              />
+              <InputCheckBox
+                error={formErrors["status"]}
+                name={"status"}
+                containerStyle="mt-4"
+                label={"وضعیت فعال"}
+                checked={newEmployeeFormData.status}
+                onInputChange={(name, value) => {
+                  newEmployeeChange(name, value);
+                }}
+                disableValue={isSubmitting}
+              />
+
               <div className="modal-action gap-2">
                 <button className="btn" onClick={() => setShowAddModal(false)}>
                   انصراف
                 </button>
                 <button
-                  className="btn btn-primary"
+                  className={`btn btn-primary ${isLoading ? " loading" : ""}`}
+                  disabled={isSubmitting}
+
                   onClick={handleAddNewEmployee}
                 >
                   ذخیره
                 </button>
               </div>
             </div>
+           
+
           </div>
         )}
       </TitleCard>
-    </main>
+    </main >
   );
 }
-
-export default EmployeeList;
+const mapStateToProps = (state) => {
+  return {
+    newEmployeeFormData: state.employee.newEmployeeFormData,
+    fetchEmployees: state.employee.fetchEmployees,
+    formErrors: state.employee.formErrors,
+    isLoading: state.employee.isLoading,
+    isSubmitting: state.employee.isSubmitting,
+  };
+};
+export default connect(mapStateToProps, actions)(EmployeeList);
