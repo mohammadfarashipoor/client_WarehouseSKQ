@@ -5,8 +5,9 @@ import AuthLayout from "../layouts/authentication";
 import HomeLayout from "../layouts/HomeLayout";
 import Squares2X2Icon from "@heroicons/react/24/outline/Squares2X2Icon";
 import AdjustmentsHorizontalIcon from "@heroicons/react/24/outline/AdjustmentsHorizontalIcon";
-import { UserIcon, UsersIcon } from "@heroicons/react/24/outline";
+import { ShoppingBagIcon, UserIcon, UsersIcon } from "@heroicons/react/24/outline";
 import EmployeeList from "../containers/EmployeeList";
+import CustomersList from "../containers/CustomersList";
 const iconClasses = `h-6 w-6`;
 const submenuIconClasses = `h-5 w-5`;
 const AuthPagesData = [
@@ -41,6 +42,19 @@ export const HomePagesData = [
         icon: <UsersIcon className={submenuIconClasses} />,
         title: "لیست کارمندان",
         element: <HomeLayout children={<EmployeeList />} />,
+      },
+    ],
+  },
+   {
+    path: "/customers",
+    icon: <ShoppingBagIcon className={iconClasses} />,
+    title: "مشتریان",
+    submenu: [
+      {
+        path: "/customers/list",
+        icon: <UsersIcon className={submenuIconClasses} />,
+        title: "لیست مشتریان",
+        element: <HomeLayout children={<CustomersList />} />,
       },
     ],
   },

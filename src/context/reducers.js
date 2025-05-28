@@ -11,6 +11,7 @@ import signupReducer from "@/containers/Register/reducer";
 import loginReducer from "@/containers/Login/reducer";
 import authenticationReducer from "@/containers/Authentication/reducer";
 import employeeReducer from "../containers/EmployeeList/reducer";
+import customerReducer from "../containers/CustomersList/reducer";
 
 const createReducer = () =>
   combineReducers({
@@ -18,6 +19,7 @@ const createReducer = () =>
     signup: signupReducer,
     login: loginReducer,
     employee: employeeReducer,
+    customer: customerReducer,
   });
 
 export default createReducer;
