@@ -7,7 +7,9 @@ function HomeLayout({ children }) {
       <div className="drawer  lg:drawer-open">
         <div className="drawer-content flex flex-col ">
           <Header />
-          {children}
+          <main className="flex-1 overflow-y-auto bg-base-200 py-4 px-6">
+            {children}
+          </main>
         </div>
 
         <input
