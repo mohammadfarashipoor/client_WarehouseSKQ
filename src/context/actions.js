@@ -11,6 +11,7 @@ import * as login from "@/containers/Login/actions";
 import * as authentication from "@/containers/Authentication/actions";
 import * as employee from "@/containers/EmployeeList/actions";
 import * as reporEmpolyees from "@/containers/ReportEmpolyees/actions";
+import * as customer from "@/containers/CustomersList/actions";
 
 export default function mapDispatchToProps(dispatch) {
   return bindActionCreators(
@@ -20,6 +21,7 @@ export default function mapDispatchToProps(dispatch) {
       ...login,
       ...employee,
       ...reporEmpolyees,
+      ...customer,
     },
     dispatch
   );

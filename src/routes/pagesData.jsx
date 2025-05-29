@@ -14,6 +14,13 @@ import {
 import EmployeeList from "@/containers/EmployeeList";
 import ReportEmpolyees from "@/containers/ReportEmpolyees";
 import NewReportEmployees from "@/containers/NewReportEmployees";
+import {
+  ShoppingBagIcon,
+  UserIcon,
+  UsersIcon,
+} from "@heroicons/react/24/outline";
+import EmployeeList from "../containers/EmployeeList";
+import CustomersList from "../containers/CustomersList";
 const iconClasses = `h-6 w-6`;
 const submenuIconClasses = `h-5 w-5`;
 const AuthPagesData = [
@@ -60,6 +67,19 @@ export const HomePagesData = [
         icon: <PlusCircleIcon className={submenuIconClasses} />,
         title: "ثبت گزارش کارمندان",
         element: <HomeLayout children={<NewReportEmployees />} />,
+      },
+    ],
+  },
+  {
+    path: "/customers",
+    icon: <ShoppingBagIcon className={iconClasses} />,
+    title: "مشتریان",
+    submenu: [
+      {
+        path: "/customers/list",
+        icon: <UsersIcon className={submenuIconClasses} />,
+        title: "لیست مشتریان",
+        element: <HomeLayout children={<CustomersList />} />,
       },
     ],
   },
