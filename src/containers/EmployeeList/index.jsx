@@ -39,7 +39,7 @@ function EmployeeList(props) {
       <div className="overflow-x-auto h-[80vh]">
         <table className="table table-xs table-pin-rows table-pin-cols">
           <thead>
-            <tr>
+            <tr className="z-0">
               <th></th>
               <th>کد</th>
               <th>نام</th>
@@ -55,7 +55,7 @@ function EmployeeList(props) {
             ))}
           </tbody>
           <tfoot>
-            <tr>
+            <tr className="z-0">
               <th></th>
               <th>کد</th>
               <th>نام</th>

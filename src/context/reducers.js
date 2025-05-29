@@ -10,7 +10,6 @@ import { combineReducers } from "redux";
 import signupReducer from "@/containers/Register/reducer";
 import loginReducer from "@/containers/Login/reducer";
 import authenticationReducer from "@/containers/Authentication/reducer";
-import employeeReducer from "@/containers/EmployeeList/reducer";
 import ReportEmpolyeesReducer from "@/containers/ReportEmpolyees/reducer";
 import employeeReducer from "@/containers/EmployeeList/reducer";
 import customerReducer from "@/containers/CustomersList/reducer";

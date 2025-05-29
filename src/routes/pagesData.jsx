@@ -4,22 +4,16 @@ import Register from "../containers/Register";
 import AuthLayout from "../layouts/authentication";
 import HomeLayout from "../layouts/HomeLayout";
 import Squares2X2Icon from "@heroicons/react/24/outline/Squares2X2Icon";
-import AdjustmentsHorizontalIcon from "@heroicons/react/24/outline/AdjustmentsHorizontalIcon";
 import {
   ClockIcon,
   PlusCircleIcon,
   UserIcon,
   UsersIcon,
+  ShoppingBagIcon,
 } from "@heroicons/react/24/outline";
 import EmployeeList from "@/containers/EmployeeList";
 import ReportEmpolyees from "@/containers/ReportEmpolyees";
 import NewReportEmployees from "@/containers/NewReportEmployees";
-import {
-  ShoppingBagIcon,
-  UserIcon,
-  UsersIcon,
-} from "@heroicons/react/24/outline";
-import EmployeeList from "../containers/EmployeeList";
 import CustomersList from "../containers/CustomersList";
 const iconClasses = `h-6 w-6`;
 const submenuIconClasses = `h-5 w-5`;

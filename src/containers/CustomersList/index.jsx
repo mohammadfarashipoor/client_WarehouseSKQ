@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TitleCard from "@/components/TitleCard";
-import InputText from "@/components/Input/InputText"
+import InputText from "@/components/Input/InputText";
 import actions from "@/context/actions";
 import { connect } from "react-redux";
 import RowCustomer from "../../components/RowCustomer";
@@ -10,17 +10,20 @@ function CustomersList(props) {
     fetchCustomers,
     formErrors,
     fetchHandleCustomers,
-    isLoading, newCustomerChange,
+    isLoading,
+    newCustomerChange,
     isSubmitting,
-    newCustomerHandle
+    newCustomerHandle,
   } = props;
 
   // کنترل نمایش مودال افزودن کارمند
   const [showAddModal, setShowAddModal] = useState(false);
-  useEffect(() => { fetchHandleCustomers() }, [])
+  useEffect(() => {
+    fetchHandleCustomers();
+  }, []);
   // ذخیره کارمند جدید و اضافه کردن آن به لیست
   const handleAddNewCustomer = () => {
-    newCustomerHandle()
+    newCustomerHandle();
     if (!formErrors && !formErrors[0]) {
       setShowAddModal(false);
     }
@@ -52,7 +55,7 @@ function CustomersList(props) {
             </tbody>
             <tfoot>
               <tr className="z-0">
-               <th></th>
+                <th></th>
                 <th>کد</th>
                 <th>نام</th>
                 <th>تلفن</th>
@@ -100,12 +103,12 @@ function CustomersList(props) {
               />
               <InputText
                 type="text"
-                error={formErrors["position"]}
-                placeholder={"مثلاً مدیر"}
-                name={"position"}
+                error={formErrors["phoneNumber"]}
+                placeholder={"مثلاً 0911123456"}
+                name={"phoneNumber"}
                 containerStyle="mt-4"
-                label={"سمت"}
-                value={newCustomerFormData.position}
+                label={"تلفن"}
+                value={newCustomerFormData.phoneNumber}
                 onInputChange={(name, value) => {
                   newCustomerChange(name, value);
                 }}
@@ -113,30 +116,17 @@ function CustomersList(props) {
               />
               <InputText
                 type="text"
-                error={formErrors["dateStart"]}
-                placeholder={"به صورت شمسی مثلاً 1/6/1404"}
-                name={"dateStart"}
+                error={formErrors["address"]}
+                placeholder={"تهران"}
+                name={"address"}
                 containerStyle="mt-4"
-                label={"تاریخ شروع"}
-                value={newCustomerFormData.dateStart}
+                label={"آدرس"}
+                value={newCustomerFormData.address}
                 onInputChange={(name, value) => {
                   newCustomerChange(name, value);
                 }}
                 disableValue={isSubmitting}
               />
-              <InputText
-                type="text"
-                error={formErrors["contractURL"]}
-                name={"contractURL"}
-                containerStyle="mt-4"
-                label={"قرارداد"}
-                value={newCustomerFormData.contractURL}
-                onInputChange={(name, value) => {
-                  newCustomerChange(name, value);
-                }}
-                disableValue={isSubmitting}
-              />
-    
 
               <div className="modal-action gap-2">
                 <button className="btn" onClick={() => setShowAddModal(false)}>
@@ -145,19 +135,16 @@ function CustomersList(props) {
                 <button
                   className={`btn btn-primary ${isLoading ? " loading" : ""}`}
                   disabled={isSubmitting}
-
                   onClick={handleAddNewCustomer}
                 >
                   ذخیره
                 </button>
               </div>
             </div>
-           
-
           </div>
         )}
       </TitleCard>
-    </main >
+    </main>
   );
 }
 const mapStateToProps = (state) => {
