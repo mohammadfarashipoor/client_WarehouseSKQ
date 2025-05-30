@@ -1,12 +1,12 @@
 /**
  *
- * Notification
+ * Toast
  *
  */
 
 import { Flip, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-function Notification() {
+function Toast() {
   return (
     <ToastContainer
       position="top-left"
@@ -24,4 +24,4 @@ function Notification() {
   );
 }
 
-export default Notification;
+export default Toast;
