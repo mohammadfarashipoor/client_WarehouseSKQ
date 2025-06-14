@@ -15,7 +15,7 @@ import {
 const initialState = {
     newCustomerFormData: {
         name: '', 
-        peronsalCode: '',
+        personalCode: '',
         phoneNumber: '',
         address: '',
         records: '',
@@ -58,7 +58,7 @@ const customerReducer = (state = initialState, action) => {
                 ...state,
                 newCustomerFormData: {
                     name: '',
-                    peronsalCode: '',
+                    personalCode: '',
                     position: '',
                     dateStart: '',
                     status: false,

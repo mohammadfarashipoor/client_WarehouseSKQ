@@ -33,7 +33,7 @@ export const newCustomerHandle = () => {
     return async (dispatch, getState) => {
         const rules = {
             name: 'required',
-            peronsalCode: 'required',
+            personalCode: 'required',
             phoneNumber: 'required',
             address: 'required',
         };
@@ -43,7 +43,7 @@ export const newCustomerHandle = () => {
 
         const { isValid, errors } = allFieldsValidation(newCustomer, rules, {
             "required.name": "نام را وارد کنید",
-            "required.peronsalCode": "کد پرسنلی را وارد کنید",
+            "required.personalCode": "کد پرسنلی را وارد کنید",
             "required.phoneNumber": "تلفن را وارد کنید",
             "required.address": "آدرس را وارد کنید",
         });

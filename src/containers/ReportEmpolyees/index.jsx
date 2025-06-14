@@ -1,30 +1,30 @@
 // DailyAndMonthlyReport.js
-import React from "react";
-import { Calendar, DateObject, toDateObject } from "react-multi-date-picker";
-import persian from "react-date-object/calendars/persian";
-import persian_fa from "react-date-object/locales/persian_fa";
+
 import { connect } from "react-redux";
 import actions from "@/context/actions";
 import TitleCard from "@/components/TitleCard";
-import { isoToJalali } from "../../utils/date";
+import { isoToJalali, persianMonths } from "../../utils/date";
+import InputSelect from "../../components/Input/InputSelect";
+import { useEffect } from "react";
 
 function ReportEmpolyees(props) {
-  const { reports, selectedMonth, setSelectedMonthAction } = props;
-
-  const handleMonthSelect = (date) => {
-    // فرض بر این است که monthDate دارای خصوصیت month.number است
-    setSelectedMonthAction(date.month.number);
-  };
-
+  const { reports, dataFilteredReports, handleDataFilteredReports, filterReportForm, fetchHandleEmployees, formErrors, fetchEmployees, reportFilterFieldChange, submitFilterReport, isLoading } = props;
+  useEffect(() => {
+    fetchHandleEmployees()
+  }, [])
   // تابعی جهت گروه‌بندی گزارش‌های ماهانه بر اساس کارمند
   const getMonthlySummary = (reports, month) => {
     const summary = {};
+    console.log(reports)
     reports.forEach((report) => {
-      // اطمینان از نوع تاریخ. در صورتی که report.date نمونه Date نباشد، تبدیل می‌کنیم.
+      // تبدیل تاریخ به صورت شمسی (تابع isoToJalali باید پیاده‌سازی شده باشد)
       const newDate = isoToJalali(report.date);
-      if (newDate.month.number === parseInt(month)) {
+
+      if (newDate.month.number === parseInt(month, 10)) {
         if (!summary[report.employeeId]) {
           summary[report.employeeId] = {
+            id: report.employeeName, // استخراج نام کارمند
+            name: report.employeeId, // استخراج نام کارمند
             workHours: 0,
             leaveHours: 0,
             overtime: 0,
@@ -35,49 +35,81 @@ function ReportEmpolyees(props) {
         summary[report.employeeId].overtime += report.overtime;
       }
     });
-    return summary;
+
+    // تبدیل شی summary به آرایه از طریق Object.values
+    return Object.values(summary);
   };
 
+  function extractLabelValue(data) {
+    return data.map(({ name, personalCode }) => ({
+      label: name,
+      value: personalCode,
+    }));
+  }
+  const EmployeeOptions = extractLabelValue(fetchEmployees);
+  function handleSubmit(event) {
+    event.preventDefault();
+    submitFilterReport()
+    const result = getMonthlySummary(reports, filterReportForm.monthNum);
+    handleDataFilteredReports(result)
+  }
   return (
     <TitleCard title="مدیریت گزارش ماهانه">
-      {/* بخش گزارش ماهانه */}
-      <div className="mb-4">
-        <label className="label block mb-1">انتخاب ماه</label>
-        <Calendar
-          calendar={persian}
-          locale={persian_fa}
-          onChange={handleMonthSelect}
-          onlyMonthPicker
-        />
-      </div>
-      {selectedMonth ? (
-        <div className="overflow-x-auto">
-          <table className="table w-full">
-            <thead>
-              <tr>
-                <th>کارمند</th>
-                <th>ساعات کاری</th>
-                <th>ساعات مرخصی</th>
-                <th>ساعات اضافه</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.entries(getMonthlySummary(reports, selectedMonth)).map(
-                ([emp, data]) => (
-                  <tr key={emp}>
-                    <td>{emp}</td>
-                    <td>{data.workHours}</td>
-                    <td>{data.leaveHours}</td>
-                    <td>{data.overtime}</td>
-                  </tr>
-                )
-              )}
-            </tbody>
-          </table>
+      <form onSubmit={handleSubmit} >
+        {/* بخش گزارش ماهانه */}
+        <div className="mb-4">
+          <InputSelect name={'monthNum'}
+            value={filterReportForm.monthNum}
+            placeholder={'ماه مورد نظر رو انتخاب کنید'}
+            error={formErrors["monthNum"]}
+            options={persianMonths} label={'انتخاب ماه'} onInputChange={(name, value) => {
+              reportFilterFieldChange(name, value);
+            }} />
         </div>
-      ) : (
-        <p className="text-gray-500">ماه مورد نظر را انتخاب کنید.</p>
-      )}
+        <div className="mb-4">
+          <InputSelect name={'personalCode'}
+            value={filterReportForm.personalCode}
+            placeholder={'کارمند مورد نظر رو انتخاب کنید'}
+            error={formErrors["personalCode"]}
+            options={EmployeeOptions} label={'نام کارمند'} onInputChange={(name, value) => {
+              reportFilterFieldChange(name, value);
+            }} />
+        </div>
+        <button
+          type="submit"
+          className={
+            "btn mt-2 w-full btn-primary" + (isLoading ? " loading" : "")
+          }
+        >
+          نمایش
+        </button>
+      </form>
+
+      <div className="overflow-x-auto">
+        <table className="table w-full">
+          <thead>
+            <tr>
+              <th>کارمند</th>
+              <th>ساعات کاری</th>
+              <th>ساعات مرخصی</th>
+              <th>ساعات اضافه</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dataFilteredReports && dataFilteredReports.map(
+              (emp, index) => (
+                <tr key={index}>
+                  <td>{emp.name + " "+ emp.id }</td>
+                  <td>{emp.workHours}</td>
+                  <td>{emp.leaveHours}</td>
+                  <td>{emp.overtime}</td>
+                </tr>
+              )
+            )}
+          </tbody>
+        </table>
+      </div>
+
     </TitleCard>
   );
 }
@@ -85,7 +117,13 @@ function ReportEmpolyees(props) {
 const mapStateToProps = (state) => ({
   dailyReportForm: state.reportEmployees.dailyReportForm,
   reports: state.reportEmployees.reports,
-  selectedMonth: state.reportEmployees.selectedMonth,
+  filterReportForm: state.reportEmployees.filterReportForm,
+  formErrors: state.reportEmployees.formErrors,
+  isLoading: state.reportEmployees.isLoading,
+  fetchEmployees: state.employee.fetchEmployees,
+  dataFilteredReports: state.reportEmployees.dataFilteredReports,
+
+
 });
 
 export default connect(mapStateToProps, actions)(ReportEmpolyees);

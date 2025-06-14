@@ -5,6 +5,7 @@ import InputText from "@/components/Input/InputText";
 import actions from "@/context/actions";
 import { connect } from "react-redux";
 import InputCheckBox from "../../components/Input/InputCheckBox";
+import InputFile from "../../components/Input/InputFile";
 function EmployeeList(props) {
   const {
     newEmployeeFormData,
@@ -14,11 +15,12 @@ function EmployeeList(props) {
     isLoading,
     newEmployeeChange,
     isSubmitting,
-    newEmployeeHandle,
+    newEmployeeHandle, handleEmployeeReset
   } = props;
 
   // کنترل نمایش مودال افزودن کارمند
   const [showAddModal, setShowAddModal] = useState(false);
+  const [editMode, setEditMode] = useState(null);
   useEffect(() => {
     fetchHandleEmployees();
   }, []);
@@ -29,12 +31,24 @@ function EmployeeList(props) {
       setShowAddModal(false);
     }
   };
+  const handleEditEmployee = (user) => {
+    setShowAddModal(true)
+    setEditMode(true)
+    for (let info in user) {
+      newEmployeeChange(info, user[info])
+    }
+  };
+  const closeModalEmployee = () => {
+    setShowAddModal(false)
+    setEditMode(false)
+    handleEmployeeReset()
+  }
   return (
     <TitleCard
-      title="لیست کارکنان"
+      title="فهرست کارکنان"
       leftBtn={true}
       handleBtn={() => setShowAddModal(true)}
-      titleBtn={"افزودن کارمند جدید"}
+      titleBtn={"جذب و استخدام"}
     >
       <div className="overflow-x-auto h-[80vh]">
         <table className="table table-xs table-pin-rows table-pin-cols">
@@ -44,14 +58,13 @@ function EmployeeList(props) {
               <th>کد</th>
               <th>نام</th>
               <th>سمت</th>
-              <th>تاریخ شروع</th>
               <th>وضعیت</th>
               <th>عملیات</th>
             </tr>
           </thead>
           <tbody>
             {fetchEmployees?.map((employee, index) => (
-              <RowEmplyee key={index} {...employee} />
+              <RowEmplyee key={index} {...employee} handleEditEmployee={handleEditEmployee} />
             ))}
           </tbody>
           <tfoot>
@@ -60,7 +73,6 @@ function EmployeeList(props) {
               <th>کد</th>
               <th>نام</th>
               <th>سمت</th>
-              <th>تاریخ شروع</th>
               <th>وضعیت</th>
               <th>عملیات</th>
             </tr>
@@ -80,16 +92,16 @@ function EmployeeList(props) {
             <h3 className="font-bold text-lg mb-4">افزودن کارمند جدید</h3>
             <InputText
               type="text"
-              error={formErrors["peronsalCode"]}
+              error={formErrors["personalCode"]}
               placeholder={"کد کارمند"}
-              name={"peronsalCode"}
+              name={"personalCode"}
               containerStyle="mt-4"
               label={"کد پرسنلی"}
-              value={newEmployeeFormData.peronsalCode}
+              value={newEmployeeFormData.personalCode}
               onInputChange={(name, value) => {
                 newEmployeeChange(name, value);
               }}
-              disableValue={isSubmitting}
+              disableValue={isSubmitting || editMode}
             />
             <InputText
               type="text"
@@ -117,22 +129,10 @@ function EmployeeList(props) {
               }}
               disableValue={isSubmitting}
             />
-            <InputText
-              type="text"
-              error={formErrors["dateStart"]}
-              placeholder={"به صورت شمسی مثلاً 1/6/1404"}
-              name={"dateStart"}
-              containerStyle="mt-4"
-              label={"تاریخ شروع"}
-              value={newEmployeeFormData.dateStart}
-              onInputChange={(name, value) => {
-                newEmployeeChange(name, value);
-              }}
-              disableValue={isSubmitting}
-            />
-            <InputText
-              type="text"
+            <InputFile
+              type="file"
               error={formErrors["contractURL"]}
+              className="file-input file-input-bordered"
               name={"contractURL"}
               containerStyle="mt-4"
               label={"قرارداد"}
@@ -155,7 +155,7 @@ function EmployeeList(props) {
             />
 
             <div className="modal-action gap-2">
-              <button className="btn" onClick={() => setShowAddModal(false)}>
+              <button className="btn" onClick={closeModalEmployee}>
                 انصراف
               </button>
               <button

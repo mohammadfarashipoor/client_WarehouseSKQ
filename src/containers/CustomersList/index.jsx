@@ -77,12 +77,12 @@ function CustomersList(props) {
               <h3 className="font-bold text-lg mb-4">افزودن مشتری جدید</h3>
               <InputText
                 type="text"
-                error={formErrors["peronsalCode"]}
+                error={formErrors["personalCode"]}
                 placeholder={"کد مشتری"}
-                name={"peronsalCode"}
+                name={"personalCode"}
                 containerStyle="mt-4"
                 label={"کد پرسنلی"}
-                value={newCustomerFormData.peronsalCode}
+                value={newCustomerFormData.personalCode}
                 onInputChange={(name, value) => {
                   newCustomerChange(name, value);
                 }}

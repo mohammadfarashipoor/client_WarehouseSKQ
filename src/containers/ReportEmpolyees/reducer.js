@@ -3,20 +3,26 @@ import {
   REPORT_FIELD_CHANGE,
   RESET_DAILY_REPORT_FORM,
   ADD_REPORT,
-  SET_SELECTED_MONTH,
-  SET_REPORT_FORM_ERRORS,
+  SET_REPORT_FORM_ERRORS, FILTER_FIELD_CHANGE , SET_REPORT_LOADING , DATA_FILTERED_REPORTS
 } from "./constants";
 
 const initialState = {
   dailyReportForm: {
     employeeId: "",
+    employeeName: "",
     date: {},
     workHours: "",
     leaveHours: "",
     overtime: "",
   },
+  filterReportForm: {
+    monthNum: "",
+    personalCode: ""
+  },
+  dataFilteredReports: [],
   reports: [],
   formErrors: {},
+  isLoading: false,
   selectedMonth: "",
 };
 
@@ -27,25 +33,36 @@ const ReportEmpolyeesReducer = (state = initialState, action) => {
         ...state,
         dailyReportForm: { ...state.dailyReportForm, ...action.payload },
       };
+    case DATA_FILTERED_REPORTS:
+      return {
+        ...state,
+        dataFilteredReports: action.payload,
+      };
     case RESET_DAILY_REPORT_FORM:
       return {
         ...state,
         dailyReportForm: { ...initialState.dailyReportForm },
+      };
+    case FILTER_FIELD_CHANGE:
+      return {
+        ...state,
+        filterReportForm: { ...state.filterReportForm, ...action.payload },
       };
     case ADD_REPORT:
       return {
         ...state,
         reports: [...state.reports, action.payload],
       };
-    case SET_SELECTED_MONTH:
-      return {
-        ...state,
-        selectedMonth: action.payload,
-      };
+
     case SET_REPORT_FORM_ERRORS:
       return {
         ...state,
         formErrors: action.payload,
+      };
+    case SET_REPORT_LOADING:
+      return {
+        ...state,
+        isLoading: action.payload
       };
     default:
       return state;

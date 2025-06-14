@@ -33,9 +33,8 @@ export const newEmployeeHandle = () => {
     return async (dispatch, getState) => {
         const rules = {
             name: 'required',
-            peronsalCode: 'required',
+            personalCode: 'required',
             position: 'required',
-            dateStart: 'required',
             contractURL: 'required',
         };
 
@@ -44,9 +43,8 @@ export const newEmployeeHandle = () => {
 
         const { isValid, errors } = allFieldsValidation(newEmployee, rules, {
             "required.name": "نام را وارد کنید",
-            "required.peronsalCode": "کد پرسنلی را وارد کنید",
+            "required.personalCode": "کد پرسنلی را وارد کنید",
             "required.position": "سمت را وارد کنید",
-            "required.dateStart": "تاریخ شروع را وارد کنید",
             "required.contractURL": "قرارداد را وارد کنید",
         });
         if (!isValid) {
@@ -62,7 +60,7 @@ export const newEmployeeHandle = () => {
             toast.success(`${firstName ? ` ${firstName}` : ""}, کارمند جدید اضافه شد`);
             dispatch({ type: EMPLOYEE_RESET });
             fetchHandleEmployees()
-            dispatch({ type: EMPLOYEE_RESET });
+            handleEmployeeReset()
         } catch (error) {
             const title = `مشکلی رخ داده دوباره تلاش کنید`;
             handleError(error, dispatch, title);
@@ -72,7 +70,12 @@ export const newEmployeeHandle = () => {
         }
     };
 };
+export const handleEmployeeReset = () => {
+    return (dispatch, getState) => {
+        dispatch({ type: EMPLOYEE_RESET });
+    }
 
+}
 export const fetchHandleEmployees = () => {
     return {
         type: FETCH_EMPLOYEES,
@@ -82,7 +85,7 @@ export const fetchHandleEmployees = () => {
                 personalCode: "EM123",
                 position: "انباردار",
                 name: "علیرضا",
-                dateStart: "1/6/1404",
+                contractUrl: "https://esign.com/wp-content/uploads/Freelance-Contract.png",
                 status: false,
             },
             {
@@ -90,7 +93,7 @@ export const fetchHandleEmployees = () => {
                 personalCode: "EM124",
                 position: "مدیر",
                 name: "رضا",
-                dateStart: "2/6/1404",
+                contractUrl: "https://esign.com/wp-content/uploads/Freelance-Contract.png",
                 status: true,
             },
             {
@@ -98,7 +101,7 @@ export const fetchHandleEmployees = () => {
                 personalCode: "EM125",
                 position: "کارشناس",
                 name: "سارا",
-                dateStart: "3/6/1404",
+                contractUrl: "https://esign.com/wp-content/uploads/Freelance-Contract.png",
                 status: false,
             },
         ]

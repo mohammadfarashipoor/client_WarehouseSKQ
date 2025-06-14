@@ -42,24 +42,24 @@ export const HomePagesData = [
   {
     path: "/employee",
     icon: <UserIcon className={iconClasses} />,
-    title: "کارمندان",
+    title: "منابع انسانی",
     submenu: [
       {
         path: "/employee/list",
         icon: <UsersIcon className={submenuIconClasses} />,
-        title: "لیست کارمندان",
+        title: "فهرست کارکنان",
         element: <HomeLayout children={<EmployeeList />} />,
       },
       {
         path: "/employee/report",
         icon: <ClockIcon className={submenuIconClasses} />,
-        title: "گزارش کارمندان",
+        title: "گزارش کارکنان",
         element: <HomeLayout children={<ReportEmpolyees />} />,
       },
       {
         path: "/employee/addreport",
         icon: <PlusCircleIcon className={submenuIconClasses} />,
-        title: "ثبت گزارش کارمندان",
+        title: "ثبت گزارش کارکنان",
         element: <HomeLayout children={<NewReportEmployees />} />,
       },
     ],

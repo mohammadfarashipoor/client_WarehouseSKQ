@@ -15,10 +15,8 @@ import {
 const initialState = {
     newEmployeeFormData: {
         name: '',
-        peronsalCode: '',
+        personalCode: '',
         position: '',
-        dateStart: '',
-        dateEnd: '',
         status: false,
         contractURL: '',
         records: '',
@@ -61,9 +59,8 @@ const employeeReducer = (state = initialState, action) => {
                 ...state,
                 newEmployeeFormData: {
                     name: '',
-                    peronsalCode: '',
+                    personalCode: '',
                     position: '',
-                    dateStart: '',
                     status: false,
                     contractURL: '',
                     records: '',
