@@ -5,12 +5,12 @@ import store from "@/context/store";
 import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
 import SuspenseContent from "./components/SuspenseContent";
 import { Suspense } from "react";
-import Toast from "./containers/Toast";
+import Notification from "./containers/Notification";
 const App = () => {
   return (
     <HistoryRouter history={history}>
       <Provider store={store}>
-        <Toast />
+        <Notification />
         <Suspense fallback={<SuspenseContent />}>
           <AppRoutes />
         </Suspense>

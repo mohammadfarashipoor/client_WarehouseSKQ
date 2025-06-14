@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import DigitalClockWithJalali from "../DigitalClockWithDate";
 import CalculatorModal from "../CalculatorModal";
 import CalendarWithEvent from "../DataPicker";
+import Notification from "../../containers/Notification";
 
 function Header() {
   const [currentTheme, setCurrentTheme] = useState(
@@ -80,7 +81,11 @@ function Header() {
           onClick={() => openNotification()}
         >
           <div className="indicator">
-            <BellIcon className="h-6 w-6" />
+            <label htmlFor="my_modal_6" className="btn">
+              <BellIcon className="h-6 w-6" />
+            </label>
+            <input type="checkbox" id="my_modal_6" className="modal-toggle" />
+            <Notification />
             {/* {noOfNotifications > 0 ? (
               <span className="indicator-item badge badge-secondary badge-sm">
                 {noOfNotifications}
