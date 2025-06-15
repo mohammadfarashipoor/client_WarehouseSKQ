@@ -35,7 +35,7 @@ function Header() {
   }, []);
 
   // Opening right sidebar for notification
-  const openNotification = () => {};
+  const openNotification = () => { };
 
   return (
     <div className="navbar sticky top-0 bg-base-100  z-10 shadow-md ">
@@ -76,23 +76,8 @@ function Header() {
         </label>
 
         {/* Notification icon */}
-        <button
-          className="btn btn-ghost ml-4  btn-circle"
-          onClick={() => openNotification()}
-        >
-          <div className="indicator">
-            <label htmlFor="my_modal_6" className="btn">
-              <BellIcon className="h-6 w-6" />
-            </label>
-            <input type="checkbox" id="my_modal_6" className="modal-toggle" />
-            <Notification />
-            {/* {noOfNotifications > 0 ? (
-              <span className="indicator-item badge badge-secondary badge-sm">
-                {noOfNotifications}
-              </span>
-            ) : null} */}
-          </div>
-        </button>
+       <Notification />
+       
 
         {/* Profile icon, opening menu on click */}
         <div className="dropdown dropdown-end ml-4">

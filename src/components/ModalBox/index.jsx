@@ -1,8 +1,8 @@
 
 function ModalBox(props) {
-    const { children, modalId, closeBtn = false, closeBtnText = "" } = props
+    const { children, modalId, closeBtn = false, closeBtnText = "" ,modalStyle = ""} = props
     return (
-        <dialog id={modalId} className="modal">
+        <dialog id={modalId} className={`modal ${modalStyle}`}>
             <div className="modal-box">
                 {children}
             </div>
