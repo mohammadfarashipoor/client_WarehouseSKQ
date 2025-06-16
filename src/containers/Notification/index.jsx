@@ -13,8 +13,8 @@ function Notification() {
       <div className="drawer-side overflow-hidden h-[91vh] top-auto bottom-px">
         <label htmlFor="notification-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
         <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
-          <li><NotificationCard /></li>
-          <li><NotificationCard /></li>
+          <li><NotificationCard message="سلام" onMarkAsRead={() => { }} /></li>
+          <li><NotificationCard message="سلام" onMarkAsRead={() => { }} /></li>
         </ul>
       </div>
     </div>
