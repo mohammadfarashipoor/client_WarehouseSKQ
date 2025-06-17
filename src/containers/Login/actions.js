@@ -54,13 +54,13 @@ export const login = () => {
     dispatch({ type: SET_LOGIN_LOADING, payload: true });
 
     try {
-      // const response = await axios.post("/api/auth/login", user);
-      const response = { data: { user: { firstName: "Ali" }, token: "ddd" } };
+      const response = await axios.post("/api/auth/login", user);
+      // const response = { data: { user: { name: "Ali" }, token: "ddd" } };
 
-      const firstName = response.data.user.firstName;
+      const name = response.data.user.name;
 
       const successfulOptions = {
-        title: `${firstName ? ` ${firstName}` : ""}, خوش برگشتی`,
+        title: `${name ? ` ${name}` : ""}, خوش برگشتی`,
         position: "tr",
         autoDismiss: 1,
       };

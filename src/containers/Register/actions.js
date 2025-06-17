@@ -58,8 +58,8 @@ export const signUp = () => {
         ...newUser,
       };
 
-      //   const response = await axios.post("/api/auth/register", user);
-      const response = { data: { token: "dddd" } };
+      const response = await axios.post("/api/auth/register", user);
+      // const response = { data: { token: "dddd" } };
       const successfulOptions = {
         title: `ثبت نام با موفقیت انجام شد .`,
         position: "tr",
