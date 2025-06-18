@@ -27,7 +27,8 @@ function EmployeeList(props) {
   // ذخیره کارمند جدید و اضافه کردن آن به لیست
   const handleAddNewEmployee = () => {
     newEmployeeHandle();
-    if (formErrors && !formErrors[0]) {
+    
+    if (formErrors[0]) {
       setShowAddModal(false);
     }
   };
@@ -93,7 +94,7 @@ function EmployeeList(props) {
             <InputText
               type="text"
               error={formErrors["personalCode"]}
-              placeholder={"کد کارمند"}
+              placeholder={"مانند : EMP12"}
               name={"personalCode"}
               containerStyle="mt-4"
               label={"کد پرسنلی"}
@@ -137,6 +138,7 @@ function EmployeeList(props) {
               containerStyle="mt-4"
               label={"قرارداد"}
               value={newEmployeeFormData.contractURL}
+              acceptType="application/pdf"
               onInputChange={(name, value) => {
                 newEmployeeChange(name, value);
               }}

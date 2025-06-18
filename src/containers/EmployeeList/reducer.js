@@ -19,7 +19,6 @@ const initialState = {
         position: '',
         status: false,
         contractURL: '',
-        records: '',
     },
     fetchEmployees: [],
     formErrors: {},

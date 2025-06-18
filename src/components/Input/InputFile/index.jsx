@@ -9,7 +9,7 @@ function InputFile({
   placeholder,
   disableValue,
   error,
-  onInputChange,
+  onInputChange,acceptType
 }) {
   const _onChange = (e) => {
     if (e.target.name == "image") {
@@ -29,6 +29,7 @@ function InputFile({
         type={"file"}
         value={value}
         name={name}
+        accept={acceptType}
         disabled={disableValue}
         placeholder={placeholder || ""}
         onChange={(e) => {

@@ -18,6 +18,7 @@ import {
 
 import handleError from "@/utils/error";
 import { allFieldsValidation } from "@/utils/validation";
+import axios from "axios";
 
 export const newEmployeeChange = (name, value) => {
     let formData = {};
@@ -39,7 +40,6 @@ export const newEmployeeHandle = () => {
         };
 
         const newEmployee = getState().employee.newEmployeeFormData;
-        const fetchEmployees = getState().employee.fetchEmployees;
 
         const { isValid, errors } = allFieldsValidation(newEmployee, rules, {
             "required.name": "نام را وارد کنید",
@@ -49,14 +49,16 @@ export const newEmployeeHandle = () => {
         });
         if (!isValid) {
             return dispatch({ type: SET_EMPLOYEE_FORM_ERRORS, payload: errors });
+        } else {
+            dispatch({ type: SET_EMPLOYEE_FORM_ERRORS, payload: {} });
         }
 
         dispatch({ type: SET_EMPLOYEE_SUBMITTING, payload: true });
         dispatch({ type: SET_EMPLOYEE_LOADING, payload: true });
 
         try {
-            // const response = await axios.post("/api/data/employee", newEmployee);
-            const firstName = newEmployee.name;
+            const response = await axios.post("/api/employee/new", newEmployee);
+            const firstName = response.data?.employee?.name;
             toast.success(`${firstName ? ` ${firstName}` : ""}, کارمند جدید اضافه شد`);
             dispatch({ type: EMPLOYEE_RESET });
             fetchHandleEmployees()
