@@ -6,6 +6,8 @@ import actions from "@/context/actions";
 import { connect } from "react-redux";
 import InputCheckBox from "../../components/Input/InputCheckBox";
 import InputFile from "../../components/Input/InputFile";
+import { onUpload } from "../../utils/storage";
+import { isEmptyObject } from "../../utils/error";
 function EmployeeList(props) {
   const {
     newEmployeeFormData,
@@ -15,20 +17,35 @@ function EmployeeList(props) {
     isLoading,
     newEmployeeChange,
     isSubmitting,
+    handleSubmitingStatus,
     newEmployeeHandle, handleEmployeeReset
   } = props;
 
   // کنترل نمایش مودال افزودن کارمند
   const [showAddModal, setShowAddModal] = useState(false);
   const [editMode, setEditMode] = useState(null);
+  const [filePdf, setFilePdf] = useState(null);
+  const [progress, setProgress] = useState(0);
   useEffect(() => {
     fetchHandleEmployees();
   }, []);
   // ذخیره کارمند جدید و اضافه کردن آن به لیست
-  const handleAddNewEmployee = () => {
-    newEmployeeHandle();
-    
-    if (formErrors[0]) {
+  const handleAddNewEmployee = async () => {
+    try {
+      const progressHandle = ({ loaded, total }) =>
+        setProgress(Math.round((loaded * 100) / total))
+      handleSubmitingStatus(true)
+      const {key} = await onUpload(filePdf, progressHandle)
+      if (key) {
+        newEmployeeChange('contractURL', key)
+      }
+      newEmployeeHandle();
+    } catch (error) {
+      console.log(error)
+    }
+    handleSubmitingStatus(false)
+    setProgress(0)
+    if (!isEmptyObject(formErrors)) {
       setShowAddModal(false);
     }
   };
@@ -43,6 +60,10 @@ function EmployeeList(props) {
     setShowAddModal(false)
     setEditMode(false)
     handleEmployeeReset()
+  }
+  const handleFileChange = (file) => {
+    newEmployeeChange(file.name, file.value)
+    setFilePdf(file.files[0])
   }
   return (
     <TitleCard
@@ -64,7 +85,7 @@ function EmployeeList(props) {
             </tr>
           </thead>
           <tbody>
-            {fetchEmployees?.map((employee, index) => (
+            {fetchEmployees?.employees?.map((employee, index) => (
               <RowEmplyee key={index} {...employee} handleEditEmployee={handleEditEmployee} />
             ))}
           </tbody>
@@ -132,15 +153,16 @@ function EmployeeList(props) {
             />
             <InputFile
               type="file"
-              error={formErrors["contractURL"]}
+              error={formErrors["contractPath"]}
               className="file-input file-input-bordered"
-              name={"contractURL"}
+              name={"contractPath"}
               containerStyle="mt-4"
               label={"قرارداد"}
-              value={newEmployeeFormData.contractURL}
+              value={newEmployeeFormData.contractPath}
               acceptType="application/pdf"
-              onInputChange={(name, value) => {
-                newEmployeeChange(name, value);
+              progress={progress}
+              onInputChange={(file) => {
+                handleFileChange(file);
               }}
               disableValue={isSubmitting}
             />

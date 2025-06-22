@@ -1,18 +1,20 @@
 import { EllipsisHorizontalIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import ModalBox from "../ModalBox";
 import { useNavigate } from "react-router";
+import { onDownload } from "../../utils/storage";
 
-function RowEmplyee({ num, personalCode, position, name, contractUrl, status, handleEditEmployee }) {
+function RowEmplyee({ num, personalCode, position, name, contractURL, status, handleEditEmployee }) {
   const navigate = useNavigate();
 
   const handleReviewRecords = () => {
     navigate(`/employee/report:${personalCode}`)
   }
   const handleContract = () => {
-    document.getElementById('modalContract').showModal()
+    onDownload(contractURL)
+    // document.getElementById('modalContract').showModal()
   }
   const handleEdit = () => {
-    handleEditEmployee({ personalCode, position, name, contractUrl, status })
+    handleEditEmployee({ personalCode, position, name, contractURL	, status })
   }
   return (
     <tr>
@@ -48,7 +50,7 @@ function RowEmplyee({ num, personalCode, position, name, contractUrl, status, ha
           </ul>
         </div>
         <ModalBox CloseBtn={true} CloseBtnText={<XMarkIcon className="w-5 h-5" />} modalId="modalContract">
-          <img src={contractUrl} alt={personalCode} />
+          <img src={contractURL	} alt={personalCode} />
         </ModalBox>
       </td>
     </tr>

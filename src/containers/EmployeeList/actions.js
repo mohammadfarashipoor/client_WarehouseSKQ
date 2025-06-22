@@ -36,24 +36,22 @@ export const newEmployeeHandle = () => {
             name: 'required',
             personalCode: 'required',
             position: 'required',
-            contractURL: 'required',
+            contractPath: 'required',
         };
 
         const newEmployee = getState().employee.newEmployeeFormData;
-
         const { isValid, errors } = allFieldsValidation(newEmployee, rules, {
             "required.name": "نام را وارد کنید",
             "required.personalCode": "کد پرسنلی را وارد کنید",
             "required.position": "سمت را وارد کنید",
-            "required.contractURL": "قرارداد را وارد کنید",
+            "required.contractPath": "قرارداد را وارد کنید",
         });
         if (!isValid) {
             return dispatch({ type: SET_EMPLOYEE_FORM_ERRORS, payload: errors });
         } else {
             dispatch({ type: SET_EMPLOYEE_FORM_ERRORS, payload: {} });
         }
-
-        dispatch({ type: SET_EMPLOYEE_SUBMITTING, payload: true });
+        handleSubmitingStatus(true)
         dispatch({ type: SET_EMPLOYEE_LOADING, payload: true });
 
         try {
@@ -67,7 +65,7 @@ export const newEmployeeHandle = () => {
             const title = `مشکلی رخ داده دوباره تلاش کنید`;
             handleError(error, dispatch, title);
         } finally {
-            dispatch({ type: SET_EMPLOYEE_SUBMITTING, payload: false });
+            handleSubmitingStatus(false)
             dispatch({ type: SET_EMPLOYEE_LOADING, payload: false });
         }
     };
@@ -79,33 +77,20 @@ export const handleEmployeeReset = () => {
 
 }
 export const fetchHandleEmployees = () => {
-    return {
-        type: FETCH_EMPLOYEES,
-        payload: [
-            {
-                num: "1",
-                personalCode: "EM123",
-                position: "انباردار",
-                name: "علیرضا",
-                contractUrl: "https://esign.com/wp-content/uploads/Freelance-Contract.png",
-                status: false,
-            },
-            {
-                num: "2",
-                personalCode: "EM124",
-                position: "مدیر",
-                name: "رضا",
-                contractUrl: "https://esign.com/wp-content/uploads/Freelance-Contract.png",
-                status: true,
-            },
-            {
-                num: "3",
-                personalCode: "EM125",
-                position: "کارشناس",
-                name: "سارا",
-                contractUrl: "https://esign.com/wp-content/uploads/Freelance-Contract.png",
-                status: false,
-            },
-        ]
-    };
-};
+    return async (dispatch, getState) => {
+        try {
+            const response = await axios.get("/api/employee/all");
+            dispatch({
+                type: FETCH_EMPLOYEES,
+                payload: response.data
+            })
+        } catch (error) {
+            const title = `در دریافت کارکنان مشکلی رخ داده دوباره تلاش کنید`;
+            handleError(error, dispatch, title);
+        }
+
+    }
+}
+export const handleSubmitingStatus = (status) => {
+    return (dispatch, getState) => dispatch({ type: SET_EMPLOYEE_SUBMITTING, payload: status });
+}

@@ -9,14 +9,11 @@ function InputFile({
   placeholder,
   disableValue,
   error,
-  onInputChange,acceptType
+  onInputChange, acceptType,
+  progress=false
 }) {
   const _onChange = (e) => {
-    if (e.target.name == "image") {
-      onInputChange(e.target.name, e.target.files[0]);
-    } else {
-      onInputChange(e.target.name, e.target.value);
-    }
+    onInputChange(e.target);
   };
   return (
     <div className={`form-control w-full ${containerStyle}`}>
@@ -37,6 +34,7 @@ function InputFile({
         }}
         className={`file-input file-input-bordered w-full input-bordered file-input-primary`}
       />
+      {progress!==0 && <progress className="progress progress-primary my-2" value={progress} max="100"></progress>}
       <ErrorText className="text-error">{error && error[0]}</ErrorText>
     </div>
   );
