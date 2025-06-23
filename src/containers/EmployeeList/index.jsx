@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import TitleCard from "@/components/TitleCard";
 import RowEmplyee from "@/components/RowEmplyee";
-import InputText from "@/components/Input/InputText";
 import actions from "@/context/actions";
 import { connect } from "react-redux";
-import InputCheckBox from "../../components/Input/InputCheckBox";
-import InputFile from "../../components/Input/InputFile";
-import { onUpload } from "../../utils/storage";
-import { isEmptyObject } from "../../utils/error";
+
+import NewEmployeeModal from "../../components/NewEmployeeModal";
 function EmployeeList(props) {
   const {
     newEmployeeFormData,
@@ -18,37 +15,19 @@ function EmployeeList(props) {
     newEmployeeChange,
     isSubmitting,
     handleSubmitingStatus,
-    newEmployeeHandle, handleEmployeeReset
+    newEmployeeHandle,
+    handleEmployeeReset
   } = props;
 
   // کنترل نمایش مودال افزودن کارمند
   const [showAddModal, setShowAddModal] = useState(false);
   const [editMode, setEditMode] = useState(null);
-  const [filePdf, setFilePdf] = useState(null);
-  const [progress, setProgress] = useState(0);
+
   useEffect(() => {
     fetchHandleEmployees();
   }, []);
   // ذخیره کارمند جدید و اضافه کردن آن به لیست
-  const handleAddNewEmployee = async () => {
-    try {
-      const progressHandle = ({ loaded, total }) =>
-        setProgress(Math.round((loaded * 100) / total))
-      handleSubmitingStatus(true)
-      const {key} = await onUpload(filePdf, progressHandle)
-      if (key) {
-        newEmployeeChange('contractURL', key)
-      }
-      newEmployeeHandle();
-    } catch (error) {
-      console.log(error)
-    }
-    handleSubmitingStatus(false)
-    setProgress(0)
-    if (!isEmptyObject(formErrors)) {
-      setShowAddModal(false);
-    }
-  };
+
   const handleEditEmployee = (user) => {
     setShowAddModal(true)
     setEditMode(true)
@@ -56,15 +35,7 @@ function EmployeeList(props) {
       newEmployeeChange(info, user[info])
     }
   };
-  const closeModalEmployee = () => {
-    setShowAddModal(false)
-    setEditMode(false)
-    handleEmployeeReset()
-  }
-  const handleFileChange = (file) => {
-    newEmployeeChange(file.name, file.value)
-    setFilePdf(file.files[0])
-  }
+
   return (
     <TitleCard
       title="فهرست کارکنان"
@@ -104,94 +75,19 @@ function EmployeeList(props) {
 
       {/* مودال افزودن کارمند جدید */}
       {showAddModal && (
-        <div
-          className="modal modal-open "
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setShowAddModal(false);
-          }}
-        >
-          <div className="modal-box relative">
-            <h3 className="font-bold text-lg mb-4">افزودن کارمند جدید</h3>
-            <InputText
-              type="text"
-              error={formErrors["personalCode"]}
-              placeholder={"مانند : EMP12"}
-              name={"personalCode"}
-              containerStyle="mt-4"
-              label={"کد پرسنلی"}
-              value={newEmployeeFormData.personalCode}
-              onInputChange={(name, value) => {
-                newEmployeeChange(name, value);
-              }}
-              disableValue={isSubmitting || editMode}
-            />
-            <InputText
-              type="text"
-              error={formErrors["name"]}
-              placeholder={"نام کارمند"}
-              name={"name"}
-              containerStyle="mt-4"
-              label={"نام"}
-              value={newEmployeeFormData.name}
-              onInputChange={(name, value) => {
-                newEmployeeChange(name, value);
-              }}
-              disableValue={isSubmitting}
-            />
-            <InputText
-              type="text"
-              error={formErrors["position"]}
-              placeholder={"مثلاً مدیر"}
-              name={"position"}
-              containerStyle="mt-4"
-              label={"سمت"}
-              value={newEmployeeFormData.position}
-              onInputChange={(name, value) => {
-                newEmployeeChange(name, value);
-              }}
-              disableValue={isSubmitting}
-            />
-            <InputFile
-              type="file"
-              error={formErrors["contractPath"]}
-              className="file-input file-input-bordered"
-              name={"contractPath"}
-              containerStyle="mt-4"
-              label={"قرارداد"}
-              value={newEmployeeFormData.contractPath}
-              acceptType="application/pdf"
-              progress={progress}
-              onInputChange={(file) => {
-                handleFileChange(file);
-              }}
-              disableValue={isSubmitting}
-            />
-            <InputCheckBox
-              error={formErrors["status"]}
-              name={"status"}
-              containerStyle="mt-4"
-              label={"وضعیت فعال"}
-              checked={newEmployeeFormData.status}
-              onInputChange={(name, value) => {
-                newEmployeeChange(name, value);
-              }}
-              disableValue={isSubmitting}
-            />
-
-            <div className="modal-action gap-2">
-              <button className="btn" onClick={closeModalEmployee}>
-                انصراف
-              </button>
-              <button
-                className={`btn btn-primary ${isLoading ? " loading" : ""}`}
-                disabled={isSubmitting}
-                onClick={handleAddNewEmployee}
-              >
-                ذخیره
-              </button>
-            </div>
-          </div>
-        </div>
+        <NewEmployeeModal
+          editMode={editMode}
+          newEmployeeFormData={newEmployeeFormData}
+          formErrors={formErrors}
+          isLoading={isLoading}
+          newEmployeeChange={newEmployeeChange}
+          isSubmitting={isSubmitting}
+          handleSubmitingStatus={handleSubmitingStatus}
+          newEmployeeHandle={newEmployeeHandle}
+          handleEmployeeReset={handleEmployeeReset}
+          setShowAddModal={setShowAddModal}
+          setEditMode={setEditMode}
+        />
       )}
     </TitleCard>
   );

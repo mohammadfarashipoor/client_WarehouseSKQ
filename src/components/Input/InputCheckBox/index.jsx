@@ -14,7 +14,7 @@ function InputCheckBox({
     if (checked) {
       onInputChange(e.target.name, false);
     } else {
-      onInputChange(e.target.name, e.target.value);
+      onInputChange(e.target.name, true);
     }
 
   };
