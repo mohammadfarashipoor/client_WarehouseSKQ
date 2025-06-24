@@ -16,7 +16,8 @@ function EmployeeList(props) {
     isSubmitting,
     handleSubmitingStatus,
     newEmployeeHandle,
-    handleEmployeeReset
+    handleEmployeeReset,
+    editEmployeeHandle 
   } = props;
 
   // کنترل نمایش مودال افزودن کارمند
@@ -28,7 +29,7 @@ function EmployeeList(props) {
   }, []);
   // ذخیره کارمند جدید و اضافه کردن آن به لیست
 
-  const handleEditEmployee = (user) => {
+  const handleEditEmployeeModal = (user) => {
     setShowAddModal(true)
     setEditMode(true)
     for (let info in user) {
@@ -57,7 +58,7 @@ function EmployeeList(props) {
           </thead>
           <tbody>
             {fetchEmployees?.employees?.map((employee, index) => (
-              <RowEmplyee key={index} {...employee} handleEditEmployee={handleEditEmployee} />
+              <RowEmplyee key={index} {...employee} handleEditEmployeeModal={handleEditEmployeeModal} />
             ))}
           </tbody>
           <tfoot>
@@ -87,6 +88,7 @@ function EmployeeList(props) {
           handleEmployeeReset={handleEmployeeReset}
           setShowAddModal={setShowAddModal}
           setEditMode={setEditMode}
+          editEmployeeHandle ={editEmployeeHandle}
         />
       )}
     </TitleCard>

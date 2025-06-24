@@ -10,7 +10,8 @@ function InputFile({
   disableValue,
   error,
   onInputChange, acceptType,
-  progress=false
+  progress = false,
+  editMode
 }) {
   const _onChange = (e) => {
     onInputChange(e.target);
@@ -24,7 +25,7 @@ function InputFile({
       </label>
       <input
         type={"file"}
-        value={value}
+        value={editMode ? '' : value}
         name={name}
         accept={acceptType}
         disabled={disableValue}
@@ -34,7 +35,8 @@ function InputFile({
         }}
         className={`file-input file-input-bordered w-full input-bordered file-input-primary`}
       />
-      {progress!==0 && <progress className="progress progress-primary my-2" value={progress} max="100"></progress>}
+      {progress !== 0 && <progress className="progress progress-primary my-2" value={progress} max="100"></progress>}
+      {editMode && <span className={"label-text text-base-content my-2"}>{value.split(/(\\|\/)/g).pop()}</span>}
       <ErrorText className="text-error">{error && error[0]}</ErrorText>
     </div>
   );

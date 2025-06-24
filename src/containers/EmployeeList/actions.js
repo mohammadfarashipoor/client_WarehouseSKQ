@@ -53,7 +53,7 @@ export const fetchHandleEmployees = () => {
 export const handleSubmitingStatus = (status) => {
     return (dispatch, getState) => dispatch({ type: SET_EMPLOYEE_SUBMITTING, payload: status });
 }
-export const newEmployeeHandle = () => {
+export const saveEmployee = (method, url, formData) => {
     return async (dispatch, getState) => {
         const rules = {
             name: 'required',
@@ -62,8 +62,7 @@ export const newEmployeeHandle = () => {
             contractPath: 'required',
         };
 
-        const newEmployee = getState().employee.newEmployeeFormData;
-        const { isValid, errors } = allFieldsValidation(newEmployee, rules, {
+        const { isValid, errors } = allFieldsValidation(formData, rules, {
             "required.name": "نام را وارد کنید",
             "required.personalCode": "کد پرسنلی را وارد کنید",
             "required.position": "سمت را وارد کنید",
@@ -79,9 +78,14 @@ export const newEmployeeHandle = () => {
         dispatch({ type: SET_EMPLOYEE_LOADING, payload: true });
 
         try {
-            const response = await axios.post("/api/employee/new", newEmployee);
+            // const response = await axios.post("/api/employee/new", newEmployee);
+            const response = await axios({
+                method,
+                url,
+                data: formData
+            });
             const firstName = response.data?.employee?.name;
-            toast.success(`${firstName ? ` ${firstName}` : ""}, کارمند جدید اضافه شد`);
+            toast.success(`${firstName || ''} ،عملیات با موفقیت انجام شد`);
             await dispatch(fetchHandleEmployees())
             dispatch(handleEmployeeReset())
             return true;
@@ -95,3 +99,17 @@ export const newEmployeeHandle = () => {
         }
     };
 };
+export const newEmployeeHandle = () => {
+    return (dispatch, getState) => {
+        const newEmployee = getState().employee.newEmployeeFormData;
+        return dispatch(saveEmployee('post', '/api/employee/new', newEmployee))
+    }
+}
+
+export const editEmployeeHandle = employeeId => {
+    return (dispatch, getState) => {
+        console.log("handleEditEmployee")
+        const editEmployee = getState().employee.newEmployeeFormData;
+        return dispatch(saveEmployee('patch', `/api/employee/edit/${employeeId}`, editEmployee))
+    }
+}

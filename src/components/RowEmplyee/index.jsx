@@ -3,7 +3,8 @@ import ModalBox from "../ModalBox";
 import { useNavigate } from "react-router";
 import { onDownload } from "../../utils/storage";
 
-function RowEmplyee({ num, personalCode, position, name, contractURL, status, handleEditEmployee }) {
+function RowEmplyee(props) {
+  const { _id, num, personalCode, position, name, contractURL, status, contractPath, handleEditEmployeeModal } = props
   const navigate = useNavigate();
 
   const handleReviewRecords = () => {
@@ -14,7 +15,7 @@ function RowEmplyee({ num, personalCode, position, name, contractURL, status, ha
     // document.getElementById('modalContract').showModal()
   }
   const handleEdit = () => {
-    handleEditEmployee({ personalCode, position, name, contractURL	, status })
+    handleEditEmployeeModal({ _id, personalCode, position, name, contractURL, contractPath, status })
   }
   return (
     <tr>
@@ -50,7 +51,7 @@ function RowEmplyee({ num, personalCode, position, name, contractURL, status, ha
           </ul>
         </div>
         <ModalBox CloseBtn={true} CloseBtnText={<XMarkIcon className="w-5 h-5" />} modalId="modalContract">
-          <img src={contractURL	} alt={personalCode} />
+          <img src={contractURL} alt={personalCode} />
         </ModalBox>
       </td>
     </tr>

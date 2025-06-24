@@ -15,7 +15,8 @@ function NewEmployeeModal(props) {
         newEmployeeHandle,
         handleEmployeeReset,
         setShowAddModal,
-        setEditMode
+        setEditMode,
+        editEmployeeHandle
     } = props;
     const [filePdf, setFilePdf] = useState(null);
     const [progress, setProgress] = useState(0);
@@ -30,8 +31,13 @@ function NewEmployeeModal(props) {
                     newEmployeeChange('contractURL', key)
                 }
             }
-            const ok = await newEmployeeHandle()
-            if (ok) {
+            let isErrorFeild = false;
+            if (editMode && newEmployeeFormData._id) {
+                isErrorFeild = await editEmployeeHandle(newEmployeeFormData._id)
+            } else {
+                isErrorFeild = await newEmployeeHandle()
+            }
+            if (isErrorFeild) {
                 setShowAddModal(false);
             }
             handleSubmitingStatus(false)
@@ -49,6 +55,13 @@ function NewEmployeeModal(props) {
     const handleFileChange = (file) => {
         newEmployeeChange(file.name, file.value)
         setFilePdf(file.files[0])
+    }
+    const handleSubmit = () => {
+        console.log(newEmployeeFormData)
+        if (editMode && newEmployeeFormData._id) {
+            handleEditEmployee(newEmployeeFormData._id)
+        }
+        else { handleAddNewEmployee() }
     }
     return (
         <div
@@ -108,6 +121,7 @@ function NewEmployeeModal(props) {
                     value={newEmployeeFormData.contractPath}
                     acceptType="application/pdf"
                     progress={progress}
+                    editMode={editMode}
                     onInputChange={(file) => {
                         handleFileChange(file);
                     }}

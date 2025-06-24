@@ -6,7 +6,7 @@
 
 import {
     EMPLOYEE_CHANGE,
-    EMPLOYEE_RESET,FETCH_EMPLOYEES ,
+    EMPLOYEE_RESET, FETCH_EMPLOYEES,
     SET_EMPLOYEE_LOADING,
     SET_EMPLOYEE_FORM_ERRORS,
     SET_EMPLOYEE_SUBMITTING
@@ -14,6 +14,7 @@ import {
 
 const initialState = {
     newEmployeeFormData: {
+        _id: '',
         name: '',
         personalCode: '',
         position: '',
@@ -58,6 +59,7 @@ const employeeReducer = (state = initialState, action) => {
             return {
                 ...state,
                 newEmployeeFormData: {
+                    _id: '',
                     name: '',
                     personalCode: '',
                     position: '',
