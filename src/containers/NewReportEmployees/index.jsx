@@ -6,26 +6,32 @@ import InputText from "@/components/Input/InputText";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import InputSelect from "../../components/Input/InputSelect";
+import { useEffect } from "react";
+import ErrorText from "../../components/Typography/ErrorText";
 function NewReportEmployees(props) {
-  const { dailyReportForm, reportFieldChange, submitDailyReport, formErrors, fetchEmployees } =
+  const { dailyReportForm, fetchReportsHandle,fetchHandleEmployees, reportFieldChange, newReportHandle, formErrors, fetchEmployees } =
     props;
+  useEffect(() => {
+    fetchHandleEmployees()
+    
+  }, [])
   const handleSubmit = (e) => {
     e.preventDefault();
-    submitDailyReport();
+    newReportHandle();
   };
   function extractLabelValue(data) {
-    return data.map(({ name, personalCode }) => ({
+    return data.map(({ name, _id }) => ({
       label: name,
-      value: personalCode,
+      value: _id,
     }));
   }
-function getEmployeeNameByCode(employees, code) {
-  // جستجوی کارمند بر اساس personalCode
-  const employee = employees.find(emp => emp.personalCode === code);
-  
-  // در صورت یافتن، نام کارمند را برمی‌گرداند؛ در غیر این صورت null یا مقدار دلخواهی برگردانید.
-  return employee ? employee.name : null;
-}
+  function getEmployeeNameByCode(employees, _id) {
+    // جستجوی کارمند بر اساس personalCode
+    const employee = employees.find(emp => emp._id === _id);
+
+    // در صورت یافتن، نام کارمند را برمی‌گرداند؛ در غیر این صورت null یا مقدار دلخواهی برگردانید.
+    return employee ? employee.name : null;
+  }
   const EmployeeOptions = extractLabelValue(fetchEmployees);
   return (
     <TitleCard title="ثبت گزارش روزانه">
@@ -38,19 +44,22 @@ function getEmployeeNameByCode(employees, code) {
           options={EmployeeOptions} label={'نام کارمند'}
           onInputChange={(name, value) => {
             reportFieldChange(name, value);
-            reportFieldChange('employeeName', getEmployeeNameByCode(fetchEmployees,value));
-            console.log(dailyReportForm)
+            reportFieldChange('employeeName', getEmployeeNameByCode(fetchEmployees, value));
           }} />
         <div>
           <label className="label block mb-1">تاریخ</label>
           <DatePicker
             value={dailyReportForm.date}
+            inputClass="input input-bordered w-full "
             onChange={(value) => reportFieldChange("date", value)}
             calendar={persian}
             locale={persian_fa}
-            className="w-full green bg-base-200"
-            style={{}}
+            containerStyle={{
+              width: "100%"
+            }}
           />
+          {formErrors["date"] && <ErrorText className="text-error">{formErrors["date"]}</ErrorText>}
+
         </div>
         <InputText
           error={formErrors["workHours"]}
@@ -88,7 +97,17 @@ function getEmployeeNameByCode(employees, code) {
             reportFieldChange(name, value);
           }}
         />
-
+        <InputText
+          placeholder="توضیحات"
+          type="textarea"
+          name={"description"}
+          containerStyle="mt-4"
+          label={"توضیحات"}
+          value={dailyReportForm.description}
+          onInputChange={(name, value) => {
+            reportFieldChange(name, value);
+          }}
+        />
         <button type="submit" className="btn btn-primary w-full">
           ثبت گزارش
         </button>

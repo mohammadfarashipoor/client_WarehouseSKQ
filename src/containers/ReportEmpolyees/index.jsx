@@ -8,14 +8,14 @@ import InputSelect from "../../components/Input/InputSelect";
 import { useEffect } from "react";
 
 function ReportEmpolyees(props) {
-  const { reports, dataFilteredReports, handleDataFilteredReports, filterReportForm, fetchHandleEmployees, formErrors, fetchEmployees, reportFilterFieldChange, submitFilterReport, isLoading } = props;
+  const { reports, dataFilteredReports,fetchReportsHandle, handleDataFilteredReports, filterReportForm, fetchHandleEmployees, formErrors, fetchEmployees, reportFilterFieldChange, submitFilterReport, isLoading } = props;
   useEffect(() => {
     fetchHandleEmployees()
+    fetchReportsHandle()
   }, [])
   // تابعی جهت گروه‌بندی گزارش‌های ماهانه بر اساس کارمند
   const getMonthlySummary = (reports, month) => {
     const summary = {};
-    console.log(reports)
     reports.forEach((report) => {
       // تبدیل تاریخ به صورت شمسی (تابع isoToJalali باید پیاده‌سازی شده باشد)
       const newDate = isoToJalali(report.date);
@@ -23,8 +23,8 @@ function ReportEmpolyees(props) {
       if (newDate.month.number === parseInt(month, 10)) {
         if (!summary[report.employeeId]) {
           summary[report.employeeId] = {
-            id: report.employeeName, // استخراج نام کارمند
-            name: report.employeeId, // استخراج نام کارمند
+            employeeName: report.employeeId.name, // استخراج نام کارمند
+            employeeId: report.employeeId.personalCode, // استخراج نام کارمند
             workHours: 0,
             leaveHours: 0,
             overtime: 0,
@@ -99,7 +99,7 @@ function ReportEmpolyees(props) {
             {dataFilteredReports && dataFilteredReports.map(
               (emp, index) => (
                 <tr key={index}>
-                  <td>{emp.name + " "+ emp.id }</td>
+                  <td>{emp.employeeName + " "+ emp.employeeId }</td>
                   <td>{emp.workHours}</td>
                   <td>{emp.leaveHours}</td>
                   <td>{emp.overtime}</td>

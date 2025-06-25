@@ -41,7 +41,7 @@ export const fetchHandleEmployees = () => {
             const response = await axios.get("/api/employee/all");
             dispatch({
                 type: FETCH_EMPLOYEES,
-                payload: response.data
+                payload: response.data?.employees
             })
         } catch (error) {
             const title = `در دریافت کارکنان مشکلی رخ داده دوباره تلاش کنید`;

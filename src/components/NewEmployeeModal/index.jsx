@@ -56,13 +56,7 @@ function NewEmployeeModal(props) {
         newEmployeeChange(file.name, file.value)
         setFilePdf(file.files[0])
     }
-    const handleSubmit = () => {
-        console.log(newEmployeeFormData)
-        if (editMode && newEmployeeFormData._id) {
-            handleEditEmployee(newEmployeeFormData._id)
-        }
-        else { handleAddNewEmployee() }
-    }
+
     return (
         <div
             className="modal modal-open "

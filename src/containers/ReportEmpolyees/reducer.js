@@ -14,6 +14,7 @@ const initialState = {
     workHours: "",
     leaveHours: "",
     overtime: "",
+    description:""
   },
   filterReportForm: {
     monthNum: "",
@@ -51,7 +52,7 @@ const ReportEmpolyeesReducer = (state = initialState, action) => {
     case ADD_REPORT:
       return {
         ...state,
-        reports: [...state.reports, action.payload],
+        reports: action.payload,
       };
 
     case SET_REPORT_FORM_ERRORS:

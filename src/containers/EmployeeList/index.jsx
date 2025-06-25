@@ -57,7 +57,7 @@ function EmployeeList(props) {
             </tr>
           </thead>
           <tbody>
-            {fetchEmployees?.employees?.map((employee, index) => (
+            {fetchEmployees?.map((employee, index) => (
               <RowEmplyee key={index} {...employee} handleEditEmployeeModal={handleEditEmployeeModal} />
             ))}
           </tbody>

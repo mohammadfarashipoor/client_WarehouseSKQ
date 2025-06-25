@@ -9,6 +9,7 @@ import { allFieldsValidation } from "../../utils/validation";
 import { toast } from "react-toastify";
 import handleError from "../../utils/error";
 import { dateObjectToISO } from "../../utils/date";
+import axios from "axios";
 export const reportFieldChange = (name, value) => {
   let newVal = value;
   if (name === "date") {
@@ -27,12 +28,25 @@ export const reportFilterFieldChange = (name, value) => {
 };
 export const handleDataFilteredReports = (value) => {
   return {
-      type: DATA_FILTERED_REPORTS,
-      payload: value,
-    }
+    type: DATA_FILTERED_REPORTS,
+    payload: value,
+  }
 }
-export const submitDailyReport = () => {
-  return (dispatch, getState) => {
+export const fetchReportsHandle = () => {
+  return async (dispatch, getState) => {
+    try {
+      const response = await axios.get("/api/report/all");
+      dispatch({ type: ADD_REPORT, payload: response.data?.reports });
+    } catch (error) {
+      const title = `دریافت گزارش ها با مشکلی مواجه شد دوباره تلاش کنید`;
+      handleError(error, dispatch, title);
+    }
+
+  }
+}
+
+export const saveReport = (method, url, formData) => {
+  return async (dispatch, getState) => {
     const rules = {
       employeeId: "required",
       workHours: "required",
@@ -41,9 +55,7 @@ export const submitDailyReport = () => {
       overtime: "required",
     };
 
-    const { dailyReportForm } = getState().reportEmployees;
-
-    const { isValid, errors } = allFieldsValidation(dailyReportForm, rules, {
+    const { isValid, errors } = allFieldsValidation(formData, rules, {
       "required.employeeId": "نام کاربری را وارد کنید",
       "required.workHours": "ساعات کاری را وارد کنید",
       "required.leaveHours": "مرخصی را وارد کنید",
@@ -53,26 +65,26 @@ export const submitDailyReport = () => {
     if (!isValid) {
       return dispatch({ type: SET_REPORT_FORM_ERRORS, payload: errors });
     }
+    dispatch({ type: SET_REPORT_FORM_ERRORS, payload: {} });
+
     // اعتبارسنجی ساده فرم، مشابه الگوی ورود
     try {
-      const newReport = {
-        id: Date.now(), // استفاده از زمان به‌عنوان شناسه ساده
-        employeeId: dailyReportForm.employeeId,
-        date: dailyReportForm.date,
-        workHours: Number(dailyReportForm.workHours),
-        leaveHours: Number(dailyReportForm.leaveHours),
-        overtime: Number(dailyReportForm.overtime),
-      };
-
-      dispatch({ type: ADD_REPORT, payload: newReport });
+      const response = await axios({
+        method,
+        url,
+        data: formData
+      });
+      dispatch(getReportsHandle())
       dispatch({ type: RESET_DAILY_REPORT_FORM });
-      toast.success("گزارش با مووفقیت افزوده شد");
+      toast.success("عملیات با مووفقیت انجام شد");
     } catch (error) {
       const title = `مشکلی پیش آمده دوباره تلاش کنید`;
       handleError(error, dispatch, title);
     }
   };
 };
+
+
 export const submitFilterReport = () => {
   return (dispatch, getState) => {
     const rules = {
@@ -101,3 +113,16 @@ export const submitFilterReport = () => {
   };
 };
 
+export const newReportHandle = () => {
+  return (dispatch, getState) => {
+    const dailyReportForm = getState().reportEmployees.dailyReportForm;
+    return dispatch(saveReport('post', '/api/report/new', dailyReportForm))
+  }
+}
+
+export const editReportHandle = reportId => {
+  return (dispatch, getState) => {
+    const { filterReportForm } = getState().reportEmployees;
+    return dispatch(saveReport('patch', `/api/report/edit/${reportId}`, filterReportForm))
+  }
+}
