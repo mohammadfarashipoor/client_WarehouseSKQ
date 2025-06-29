@@ -4,16 +4,16 @@ import { connect } from "react-redux";
 import TitleCard from "@/components/TitleCard";
 import InputText from "@/components/Input/InputText";
 import persian from "react-date-object/calendars/persian";
-import persian_fa from "react-date-object/locales/persian_fa";
+import persian_en from "react-date-object/locales/persian_en";
 import InputSelect from "../../components/Input/InputSelect";
 import { useEffect } from "react";
 import ErrorText from "../../components/Typography/ErrorText";
 function NewReportEmployees(props) {
-  const { dailyReportForm, fetchReportsHandle,fetchHandleEmployees, reportFieldChange, newReportHandle, formErrors, fetchEmployees } =
+  const { dailyReportForm, fetchReportsHandle, fetchHandleEmployees, reportFieldChange, newReportHandle, formErrors, fetchEmployees } =
     props;
   useEffect(() => {
     fetchHandleEmployees()
-    
+
   }, [])
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -51,9 +51,11 @@ function NewReportEmployees(props) {
           <DatePicker
             value={dailyReportForm.date}
             inputClass="input input-bordered w-full "
-            onChange={(value) => reportFieldChange("date", value)}
+            onChange={(name, value) => {
+              reportFieldChange("date", value.validatedValue[0])
+            }}
             calendar={persian}
-            locale={persian_fa}
+            locale={persian_en}
             containerStyle={{
               width: "100%"
             }}

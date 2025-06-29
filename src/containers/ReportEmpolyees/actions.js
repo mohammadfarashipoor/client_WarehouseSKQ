@@ -8,12 +8,11 @@ import {
 import { allFieldsValidation } from "../../utils/validation";
 import { toast } from "react-toastify";
 import handleError from "../../utils/error";
-import { dateObjectToISO } from "../../utils/date";
 import axios from "axios";
 export const reportFieldChange = (name, value) => {
   let newVal = value;
   if (name === "date") {
-    newVal = dateObjectToISO(value);
+    newVal = value;
   }
   return {
     type: REPORT_FIELD_CHANGE,
@@ -41,7 +40,6 @@ export const fetchReportsHandle = () => {
       const title = `دریافت گزارش ها با مشکلی مواجه شد دوباره تلاش کنید`;
       handleError(error, dispatch, title);
     }
-
   }
 }
 
@@ -74,7 +72,7 @@ export const saveReport = (method, url, formData) => {
         url,
         data: formData
       });
-      dispatch(getReportsHandle())
+      dispatch(fetchReportsHandle())
       dispatch({ type: RESET_DAILY_REPORT_FORM });
       toast.success("عملیات با مووفقیت انجام شد");
     } catch (error) {
@@ -86,26 +84,25 @@ export const saveReport = (method, url, formData) => {
 
 
 export const submitFilterReport = () => {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     const rules = {
-      monthNum: "required",
+      datePickerFilter: "required",
     };
-
     const { filterReportForm } = getState().reportEmployees;
 
     const { isValid, errors } = allFieldsValidation(filterReportForm, rules, {
-      "required.monthNum": "ماه مورد نظر را وارد کنید",
+      "required.datePickerFilter": "ماه مورد نظر را وارد کنید",
     });
     if (!isValid) {
       return dispatch({ type: SET_REPORT_FORM_ERRORS, payload: errors });
     }
     try {
       const {
-        monthNum,
+        datePickerFilter,
         personalCode
       } = filterReportForm
-      // const response = await axios.post("/api/employee/filter",  {monthNum,personalCode});
-      // handleDataFilteredReports(response.data)
+      const response = await axios.post("/api/report/by-month", { datePickerFilter,personalCode });
+      dispatch(handleDataFilteredReports(response.data.reports))
     } catch (error) {
       const title = `مشکلی پیش آمده دوباره تلاش کنید`;
       handleError(error, dispatch, title);

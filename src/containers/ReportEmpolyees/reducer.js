@@ -17,7 +17,7 @@ const initialState = {
     description:""
   },
   filterReportForm: {
-    monthNum: "",
+    datePickerFilter: "",
     personalCode: ""
   },
   dataFilteredReports: [],

@@ -3,68 +3,48 @@
 import { connect } from "react-redux";
 import actions from "@/context/actions";
 import TitleCard from "@/components/TitleCard";
-import { isoToJalali, persianMonths } from "../../utils/date";
 import InputSelect from "../../components/Input/InputSelect";
 import { useEffect } from "react";
-
+import DatePicker from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian";
+import persian_en from "react-date-object/locales/persian_en";
 function ReportEmpolyees(props) {
-  const { reports, dataFilteredReports,fetchReportsHandle, handleDataFilteredReports, filterReportForm, fetchHandleEmployees, formErrors, fetchEmployees, reportFilterFieldChange, submitFilterReport, isLoading } = props;
+  const {  dataFilteredReports, fetchReportsHandle, filterReportForm, fetchHandleEmployees, formErrors, fetchEmployees, reportFilterFieldChange, submitFilterReport, isLoading } = props;
   useEffect(() => {
     fetchHandleEmployees()
     fetchReportsHandle()
   }, [])
-  // تابعی جهت گروه‌بندی گزارش‌های ماهانه بر اساس کارمند
-  const getMonthlySummary = (reports, month) => {
-    const summary = {};
-    reports.forEach((report) => {
-      // تبدیل تاریخ به صورت شمسی (تابع isoToJalali باید پیاده‌سازی شده باشد)
-      const newDate = isoToJalali(report.date);
-
-      if (newDate.month.number === parseInt(month, 10)) {
-        if (!summary[report.employeeId]) {
-          summary[report.employeeId] = {
-            employeeName: report.employeeId.name, // استخراج نام کارمند
-            employeeId: report.employeeId.personalCode, // استخراج نام کارمند
-            workHours: 0,
-            leaveHours: 0,
-            overtime: 0,
-          };
-        }
-        summary[report.employeeId].workHours += report.workHours;
-        summary[report.employeeId].leaveHours += report.leaveHours;
-        summary[report.employeeId].overtime += report.overtime;
-      }
-    });
-
-    // تبدیل شی summary به آرایه از طریق Object.values
-    return Object.values(summary);
-  };
 
   function extractLabelValue(data) {
-    return data.map(({ name, personalCode }) => ({
+    return data.map(({ name, _id }) => ({
       label: name,
-      value: personalCode,
+      value: _id,
     }));
   }
-  const EmployeeOptions = extractLabelValue(fetchEmployees);
+  const EmployeeOptions = [{label:'همه کاربران',value:''},...extractLabelValue(fetchEmployees)];
   function handleSubmit(event) {
     event.preventDefault();
-    submitFilterReport()
-    const result = getMonthlySummary(reports, filterReportForm.monthNum);
-    handleDataFilteredReports(result)
+    submitFilterReport();
   }
   return (
     <TitleCard title="مدیریت گزارش ماهانه">
       <form onSubmit={handleSubmit} >
         {/* بخش گزارش ماهانه */}
         <div className="mb-4">
-          <InputSelect name={'monthNum'}
-            value={filterReportForm.monthNum}
-            placeholder={'ماه مورد نظر رو انتخاب کنید'}
-            error={formErrors["monthNum"]}
-            options={persianMonths} label={'انتخاب ماه'} onInputChange={(name, value) => {
-              reportFilterFieldChange(name, value);
-            }} />
+          <DatePicker
+            calendar={persian}
+            locale={persian_en}
+            onlyMonthPicker
+            format="YYYY/MM"
+            name="datePickerFilter"
+            onChange={(name, value) => {
+              reportFilterFieldChange("datePickerFilter", value.validatedValue[0]);
+            }}
+            inputClass="input input-bordered w-full "
+            containerStyle={{
+              width: "100%"
+            }}
+          />
         </div>
         <div className="mb-4">
           <InputSelect name={'personalCode'}
@@ -99,7 +79,7 @@ function ReportEmpolyees(props) {
             {dataFilteredReports && dataFilteredReports.map(
               (emp, index) => (
                 <tr key={index}>
-                  <td>{emp.employeeName + " "+ emp.employeeId }</td>
+                  <td>{emp.employeeId.name + " " + emp.employeeId.personalCode}</td>
                   <td>{emp.workHours}</td>
                   <td>{emp.leaveHours}</td>
                   <td>{emp.overtime}</td>
