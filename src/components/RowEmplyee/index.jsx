@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { onDownload } from "../../utils/storage";
 
 function RowEmplyee(props) {
-  const { _id, num, personalCode, position, name, contractURL, status, contractPath, handleEditEmployeeModal } = props
+  const { _id, num, personalCode, position, name, contractURL, status, contractPath, handleEditEmployeeModal, deleteEmployeeHandle } = props
   const navigate = useNavigate();
 
   const handleReviewRecords = () => {
@@ -12,7 +12,6 @@ function RowEmplyee(props) {
   }
   const handleContract = () => {
     onDownload(contractURL)
-    // document.getElementById('modalContract').showModal()
   }
   const handleEdit = () => {
     handleEditEmployeeModal({ _id, personalCode, position, name, contractURL, contractPath, status })
@@ -46,12 +45,18 @@ function RowEmplyee(props) {
               <button onClick={handleEdit}>ویرایش</button>
             </li>
             <li>
-              <span>حذف</span>
+              <button onClick={() => document.getElementById('modalDelete').showModal()}>حذف</button>
             </li>
           </ul>
         </div>
-        <ModalBox CloseBtn={true} CloseBtnText={<XMarkIcon className="w-5 h-5" />} modalId="modalContract">
-          <img src={contractURL} alt={personalCode} />
+        <ModalBox modalId="modalDelete" >
+          <div className="flex flex-col text-center gap-2">
+            <p className="text-base">{name ? `آیا از حذف ${name} اطمینان دارید؟ ` : `آیا از حذف اطمینان دارید؟ `}</p>
+            <div className="flex justify-center gap-2">
+              <button className="btn btn-outline btn-error" onClick={() => deleteEmployeeHandle(_id, contractURL)}>حذف</button>
+              <button className="btn" onClick={() => document.getElementById('modalDelete').close()} >انصراف</button>
+            </div>
+          </div>
         </ModalBox>
       </td>
     </tr>

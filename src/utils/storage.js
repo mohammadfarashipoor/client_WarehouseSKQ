@@ -39,3 +39,25 @@ export const onDownload = async (key) => {
         toast.error('خطا در دانلود یا فایل یافت نشد');
     }
 };
+
+export const onDeleteFile = async (key) => {
+  if (!key) {
+    toast.warning("ابتدا یک فایل برای حذف مشخص کنید");
+    return;
+  }
+
+  try {
+    // 1) اگر API‌تون DELETE /api/storage/delete/:key باشه:
+    const res = await axios.delete(`/api/storage/delete/${encodeURIComponent(key)}`);
+
+    // یا اگر API برای delete‌ نیاز به ارسال body داره:
+    // const res = await axios.delete("/api/storage/delete", { data: { key } });
+
+    toast.success("فایل با موفقیت حذف شد");
+    return res.data;
+  } catch (err) {
+    console.error("Error deleting file:", err);
+    toast.error("حذف فایل ناموفق بود");
+    throw err;
+  }
+};

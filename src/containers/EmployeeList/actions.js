@@ -19,6 +19,7 @@ import {
 import handleError from "@/utils/error";
 import { allFieldsValidation } from "@/utils/validation";
 import axios from "axios";
+import { onDeleteFile } from "../../utils/storage";
 
 export const newEmployeeChange = (name, value) => {
     let formData = {};
@@ -108,8 +109,23 @@ export const newEmployeeHandle = () => {
 
 export const editEmployeeHandle = employeeId => {
     return (dispatch, getState) => {
-        console.log("handleEditEmployee")
         const editEmployee = getState().employee.newEmployeeFormData;
         return dispatch(saveEmployee('patch', `/api/employee/edit/${employeeId}`, editEmployee))
     }
+}
+export const deleteEmployeeHandle = (employeeId,key) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await axios.delete(`/api/employee/delete/${employeeId}`);
+            await onDeleteFile(key)
+            await dispatch(fetchHandleEmployees())
+            toast.success(` حذف با موفقیت انجام شد`);
+
+        } catch (error) {
+            const title = `حذف با مشکلی مواجه شد دوباره تلاش کنید`;
+            handleError(error, dispatch, title);
+        }
+
+    }
+
 }
