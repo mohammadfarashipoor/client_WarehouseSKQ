@@ -20,7 +20,7 @@ function Menu() {
             سنگ کاغذ قیچی
           </Link>
         </li>
-        {routes.map((route, k) => {
+        {routes.filter(route => !route.hidden).map((route, k) => {
           return (
             <li className="" key={k}>
               {route.submenu ? (

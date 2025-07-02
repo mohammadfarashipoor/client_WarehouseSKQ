@@ -13,6 +13,7 @@ import authenticationReducer from "@/containers/Authentication/reducer";
 import ReportEmpolyeesReducer from "@/containers/ReportEmpolyees/reducer";
 import employeeReducer from "@/containers/EmployeeList/reducer";
 import customerReducer from "@/containers/CustomersList/reducer";
+import profileSettingReducer from "@/containers/ProfileSetting/reducer";
 
 const createReducer = () =>
   combineReducers({
@@ -22,6 +23,7 @@ const createReducer = () =>
     employee: employeeReducer,
     reportEmployees: ReportEmpolyeesReducer,
     customer: customerReducer,
+    profileSetting: profileSettingReducer,
   });
 
 export default createReducer;

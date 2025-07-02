@@ -15,6 +15,7 @@ import EmployeeList from "@/containers/EmployeeList";
 import ReportEmpolyees from "@/containers/ReportEmpolyees";
 import NewReportEmployees from "@/containers/NewReportEmployees";
 import CustomersList from "../containers/CustomersList";
+import ProfileSetting from "../containers/ProfileSetting";
 const iconClasses = `h-6 w-6`;
 const submenuIconClasses = `h-5 w-5`;
 const AuthPagesData = [
@@ -77,7 +78,14 @@ export const HomePagesData = [
       },
     ],
   },
+  {
+    path: "/profile-settings",
+    title: "تنظیمات",
+    hidden: true,
+    element: <HomeLayout children={<ProfileSetting />} />,
+  },
 ];
+
 const NotFoundPageData = [
   {
     path: "*",

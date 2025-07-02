@@ -91,7 +91,7 @@ function Header() {
             className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
           >
             <li className="justify-between">
-              <Link to={"/settings-profile"}>تنظیمات پروفایل</Link>
+              <Link to={"/profile-settings"}>تنظیمات پروفایل</Link>
             </li>
 
             <div className="divider mt-0 mb-0"></div>

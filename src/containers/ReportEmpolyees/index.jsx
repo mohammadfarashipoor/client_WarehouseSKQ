@@ -11,6 +11,7 @@ import persian_en from "react-date-object/locales/persian_en";
 import { useMemo } from "react";
 import { HOURLY_RATE, OVERTIME_RATE } from "./constants";
 import { formatThousand } from "../../utils/numbers";
+import ErrorText from "../../components/Typography/ErrorText";
 function ReportEmpolyees(props) {
   const { dataFilteredReports, fetchReportsHandle, filterReportForm, fetchHandleEmployees, formErrors, fetchEmployees, reportFilterFieldChange, submitFilterReport, isLoading } = props;
   useEffect(() => {
@@ -43,7 +44,7 @@ function ReportEmpolyees(props) {
   }
   const hourlyRate = totals.workHours * HOURLY_RATE
   const overrtimeRate = totals.overtime * OVERTIME_RATE
-  console.log(hourlyRate,overrtimeRate)
+  console.log(hourlyRate, overrtimeRate)
   return (
     <TitleCard title="مدیریت گزارش ماهانه">
       <form onSubmit={handleSubmit} >
@@ -63,6 +64,10 @@ function ReportEmpolyees(props) {
               width: "100%"
             }}
           />
+          {formErrors["datePickerFilter"]
+            && (
+              <ErrorText className="text-error">{formErrors["datePickerFilter"]}</ErrorText>
+            )}
         </div>
         <div className="mb-4">
           <InputSelect name={'personalCode'}
@@ -112,7 +117,7 @@ function ReportEmpolyees(props) {
               <td>{totals.leaveHours}</td>
               <td>{totals.overtime}</td>
             </tr>
-           {totals && <tr className="font-bold">
+            {totals && <tr className="font-bold">
               <td>{`مبلغ کل : ${formatThousand(hourlyRate + overrtimeRate)}`}</td>
               <td>{formatThousand(hourlyRate)}</td>
               <td>{totals.leaveHours}</td>
