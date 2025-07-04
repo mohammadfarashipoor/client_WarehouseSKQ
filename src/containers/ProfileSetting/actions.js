@@ -5,11 +5,13 @@ import {
     SET_LEGAL_FORM_ERRORS,
     LEGAL_RESET,
 } from './constants';
+import { allFieldsValidation } from "../../utils/validation";
+import handleError from "../../utils/error";
+import { toast } from "react-toastify";
 
 export const legalChange = (name, value) => {
     let formData = {};
     formData[name] = value;
-
     return {
         type: LEGAL_CHANGE,
         payload: formData,
@@ -34,7 +36,7 @@ export const legalChangeSubmit = () => {
         dispatch({ type: SET_LEGAL_LOADING, payload: true });
 
         try {
-            const response = await axios.post("/api/setting/legal", legal);
+            const response = await axios.put("/api/setting/legal", legal);
             dispatch({ type: LEGAL_CHANGE, payload: response.data });
 
             toast.success('مبلغ با موفقیت تغییر کرد');
@@ -53,8 +55,8 @@ export const getLegalSetting = () => {
 
         try {
             dispatch({ type: SET_LEGAL_LOADING, payload: true });
-            const response = await axios.get("/api/setting/legal");
-            dispatch({ type: LEGAL_CHANGE, payload: response.data });
+            const response = await axios.get("/api/setting");
+            dispatch({ type: LEGAL_CHANGE, payload:response.data.setting });
 
         } catch (error) {
             handleError(error, dispatch);

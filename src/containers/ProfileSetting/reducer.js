@@ -40,9 +40,6 @@ const legalSettingReducer = (state = initialState, action) => {
     case LEGAL_RESET:
       return {
         ...state,
-        legalSettingFormData: {
-          hourlyRate: '',
-        },
         formErrors: {},
         isLoading: false
       };

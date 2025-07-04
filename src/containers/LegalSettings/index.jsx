@@ -1,13 +1,18 @@
 import InputText from "@/components/Input/InputText";
 import { useEffect } from "react";
+import { formatThousand, toTomanWords } from "../../utils/numbers";
 
 
 function LegalSettings(props) {
     const { legalSettingFormData, formErrors, isLoading, legalChangeSubmit, legalChange,getLegalSetting } = props
     useEffect(()=>{getLegalSetting()},[])
+    const handleSubmit = (e)=>{
+        e.preventDefault()
+        legalChangeSubmit()
+    }
     return (
         <div>
-            <form onSubmit={legalChangeSubmit} noValidate>
+            <form onSubmit={handleSubmit} noValidate>
                 <div className="mb-4">
                     <InputText
                         error={formErrors["hourlyRate"]}
@@ -15,11 +20,12 @@ function LegalSettings(props) {
                         containerStyle="mt-4"
                         label={"نرخ حقوق ساعتی"}
                         value={legalSettingFormData.hourlyRate}
-                        placeholder={legalSettingFormData.hourlyRate}
+                        placeholder={formatThousand(legalSettingFormData.hourlyRate)}
                         onInputChange={(name, value) => {
                             legalChange(name, value);
                         }}
                     />
+                    {legalSettingFormData.hourlyRate && <span className="my-2">{toTomanWords(legalSettingFormData.hourlyRate)}</span>}
                 </div>
 
                 <button

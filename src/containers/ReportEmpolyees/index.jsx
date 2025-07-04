@@ -9,14 +9,14 @@ import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_en from "react-date-object/locales/persian_en";
 import { useMemo } from "react";
-import { HOURLY_RATE, OVERTIME_RATE } from "./constants";
 import { formatThousand } from "../../utils/numbers";
 import ErrorText from "../../components/Typography/ErrorText";
 function ReportEmpolyees(props) {
-  const { dataFilteredReports, fetchReportsHandle, filterReportForm, fetchHandleEmployees, formErrors, fetchEmployees, reportFilterFieldChange, submitFilterReport, isLoading } = props;
+  const { dataFilteredReports, fetchReportsHandle, filterReportForm, fetchHandleEmployees, formErrors, fetchEmployees, reportFilterFieldChange, submitFilterReport, isLoading, legalSettingFormData, getLegalSetting} = props;
   useEffect(() => {
     fetchHandleEmployees()
     fetchReportsHandle()
+    getLegalSetting()
   }, [])
   const totals = useMemo(() => {
     return dataFilteredReports.reduce(
@@ -42,9 +42,10 @@ function ReportEmpolyees(props) {
     event.preventDefault();
     submitFilterReport();
   }
-  const hourlyRate = totals.workHours * HOURLY_RATE
-  const overrtimeRate = totals.overtime * OVERTIME_RATE
-  console.log(hourlyRate, overrtimeRate)
+  const {hourlyRate}= legalSettingFormData
+  const overtimeRate= hourlyRate * 1.5
+  const hourlyRateTotal = totals.workHours * hourlyRate
+  const overrtimeRateTotal = totals.overtime * overtimeRate
   return (
     <TitleCard title="مدیریت گزارش ماهانه">
       <form onSubmit={handleSubmit} >
@@ -93,6 +94,7 @@ function ReportEmpolyees(props) {
           <thead>
             <tr>
               <th>کارمند</th>
+              <th>تاریخ</th>
               <th>ساعات کاری</th>
               <th>ساعات مرخصی</th>
               <th>ساعات اضافه</th>
@@ -103,6 +105,7 @@ function ReportEmpolyees(props) {
               (emp, index) => (
                 <tr key={index}>
                   <td>{emp.employeeId?.name + " " + emp.employeeId?.personalCode}</td>
+                  <td>{emp.date?.split("T")[0]}</td>
                   <td>{emp.workHours}</td>
                   <td>{emp.leaveHours}</td>
                   <td>{emp.overtime}</td>
@@ -113,15 +116,17 @@ function ReportEmpolyees(props) {
           <tfoot>
             <tr className="font-bold">
               <td>جمع کل</td>
+              <td></td>
               <td>{totals.workHours}</td>
               <td>{totals.leaveHours}</td>
               <td>{totals.overtime}</td>
             </tr>
             {totals && <tr className="font-bold">
-              <td>{`مبلغ کل : ${formatThousand(hourlyRate + overrtimeRate)}`}</td>
-              <td>{formatThousand(hourlyRate)}</td>
+              <td>{`مبلغ کل : ${formatThousand(hourlyRateTotal + overrtimeRateTotal)}`}</td>
+              <td></td>
+              <td>{formatThousand(hourlyRateTotal)}</td>
               <td>{totals.leaveHours}</td>
-              <td>{formatThousand(overrtimeRate)}</td>
+              <td>{formatThousand(overrtimeRateTotal)}</td>
             </tr>}
           </tfoot>
         </table>
@@ -139,8 +144,7 @@ const mapStateToProps = (state) => ({
   isLoading: state.reportEmployees.isLoading,
   fetchEmployees: state.employee.fetchEmployees,
   dataFilteredReports: state.reportEmployees.dataFilteredReports,
-
-
+  legalSettingFormData: state.profileSetting.legalSettingFormData,
 });
 
 export default connect(mapStateToProps, actions)(ReportEmpolyees);
