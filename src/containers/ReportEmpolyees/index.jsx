@@ -129,6 +129,7 @@ function ReportEmpolyees(props) {
               <th>ساعات کاری</th>
               <th>ساعات مرخصی</th>
               <th>ساعات اضافه</th>
+              <th className="hidden">توضیحات</th>
             </tr>
           </thead>
           <tbody>
@@ -140,6 +141,7 @@ function ReportEmpolyees(props) {
                   <td>{emp.workHours}</td>
                   <td>{emp.leaveHours}</td>
                   <td>{emp.overtime}</td>
+                  <td className="hidden">{emp.description}</td>
                 </tr>
               )
             )}

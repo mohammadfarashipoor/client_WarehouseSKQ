@@ -11,6 +11,8 @@ function InputText({
   disableValue,
   error,
   onInputChange,
+  minLen=null,
+  maxLen=null,
 }) {
   const _onChange = (e) => {
     if (e.target.name == "image") {
@@ -32,6 +34,9 @@ function InputText({
         name={name}
         disabled={disableValue}
         placeholder={placeholder || ""}
+        min={minLen}
+        max={maxLen}
+        inputMode={type == "number" && "numeric"}
         onChange={(e) => {
           _onChange(e);
         }}

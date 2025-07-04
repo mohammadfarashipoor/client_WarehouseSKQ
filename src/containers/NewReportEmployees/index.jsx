@@ -67,6 +67,7 @@ function NewReportEmployees(props) {
           error={formErrors["workHours"]}
           placeholder="ساعات کاری"
           type="number"
+          minLen="0"
           name={"workHours"}
           containerStyle="mt-4"
           label={"ساعات کاری"}
@@ -79,6 +80,7 @@ function NewReportEmployees(props) {
           error={formErrors["leaveHours"]}
           placeholder="ساعات مرخصی"
           type="number"
+          minLen="0"
           name={"leaveHours"}
           containerStyle="mt-4"
           label={"ساعات مرخصی"}
@@ -91,6 +93,7 @@ function NewReportEmployees(props) {
           error={formErrors["overtime"]}
           placeholder="ساعات اضافه"
           type="number"
+          minLen="0"
           name={"overtime"}
           containerStyle="mt-4"
           label={"ساعات اضافه"}
