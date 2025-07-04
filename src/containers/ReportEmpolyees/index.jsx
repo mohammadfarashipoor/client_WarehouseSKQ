@@ -4,13 +4,16 @@ import { connect } from "react-redux";
 import actions from "@/context/actions";
 import TitleCard from "@/components/TitleCard";
 import InputSelect from "../../components/Input/InputSelect";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_en from "react-date-object/locales/persian_en";
 import { useMemo } from "react";
 import { formatThousand } from "../../utils/numbers";
 import ErrorText from "../../components/Typography/ErrorText";
+import  {useExportExcel} from "@/hooks/useExportExcel";
+import ChevronDownIcon from "@heroicons/react/24/outline/ChevronDownIcon";
+
 function ReportEmpolyees(props) {
   const { dataFilteredReports, fetchReportsHandle, filterReportForm, fetchHandleEmployees, formErrors, fetchEmployees, reportFilterFieldChange, submitFilterReport, isLoading, legalSettingFormData, getLegalSetting} = props;
   useEffect(() => {
@@ -18,6 +21,13 @@ function ReportEmpolyees(props) {
     fetchReportsHandle()
     getLegalSetting()
   }, [])
+  const tableRef = useRef(null);
+
+  // این هوک هر بار با props جدید می‌سازد
+  const onExport = useExportExcel(tableRef, {
+    fileName: `گزارش_${filterReportForm.datePickerFilter}`,
+    sheetName: 'گزارش‌ها'
+  });
   const totals = useMemo(() => {
     return dataFilteredReports.reduce(
       (acc, r) => {
@@ -79,18 +89,39 @@ function ReportEmpolyees(props) {
               reportFilterFieldChange(name, value);
             }} />
         </div>
-        <button
-          type="submit"
+      <div className="flex  w-full items-center gap-2">
+      <button type="submit" className="btn btn-primary w-[90%]">
+        نمایش
+      </button>
+
+      <div className="dropdown dropdown-end w-[10%]">
+        <label tabIndex={0} className="btn ">
+        <ChevronDownIcon
           className={
-            "btn mt-2 w-full btn-primary" + (isLoading ? " loading" : "")
+            "w-5 h-5 mt-1 float-right delay-400 duration-500 transition-all  " 
           }
+        />
+        </label>
+
+        <ul
+          tabIndex={0}
+          className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-40 z-10"
         >
-          نمایش
-        </button>
+          <li>        
+            <button
+              onClick={onExport}
+              type="button"
+              className="btn w-full ">
+              دانلود اکسل
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
       </form>
 
       <div className="overflow-x-auto">
-        <table className="table w-full">
+        <table className="table w-full" ref={tableRef}>
           <thead>
             <tr>
               <th>کارمند</th>
@@ -131,7 +162,6 @@ function ReportEmpolyees(props) {
           </tfoot>
         </table>
       </div>
-
     </TitleCard>
   );
 }
