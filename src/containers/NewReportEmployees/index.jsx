@@ -8,6 +8,7 @@ import persian_en from "react-date-object/locales/persian_en";
 import InputSelect from "../../components/Input/InputSelect";
 import { useEffect } from "react";
 import ErrorText from "../../components/Typography/ErrorText";
+import Textarea from "../../components/Input/Textarea";
 function NewReportEmployees(props) {
   const { dailyReportForm, fetchReportsHandle, fetchHandleEmployees, reportFieldChange, newReportHandle, formErrors, fetchEmployees } =
     props;
@@ -38,7 +39,7 @@ function NewReportEmployees(props) {
       <form onSubmit={handleSubmit} className="space-y-4">
 
         <InputSelect name={'employeeId'}
-          value={dailyReportForm.employeeId}
+          selectedValue={dailyReportForm.employeeId}
           placeholder={'کارمند مورد نظر رو انتخاب کنید'}
           error={formErrors["employeeId"]}
           options={EmployeeOptions} label={'نام کارمند'}
@@ -63,48 +64,45 @@ function NewReportEmployees(props) {
           {formErrors["date"] && <ErrorText className="text-error">{formErrors["date"]}</ErrorText>}
 
         </div>
+        <div className="md:flex md:gap-2">
         <InputText
-          error={formErrors["workHours"]}
-          placeholder="ساعات کاری"
-          type="number"
-          minLen="0"
-          name={"workHours"}
+          error={formErrors["startWorkTime"]}
+          type="time"
+          name={"startWorkTime"}
           containerStyle="mt-4"
-          label={"ساعات کاری"}
-          value={dailyReportForm.workHours}
+          label={"ساعت شروع"}
+          value={dailyReportForm.startWorkTime}
           onInputChange={(name, value) => {
             reportFieldChange(name, value);
           }}
         />
         <InputText
+          error={formErrors["endWorkTime"]}
+          type="time"
+          name={"endWorkTime"}
+          containerStyle="mt-4"
+          label={"ساعت پایان"}
+          value={dailyReportForm.endWorkTime}
+          onInputChange={(name, value) => {
+            reportFieldChange(name, value);
+          }}
+          />
+          </div>
+        <InputText
           error={formErrors["leaveHours"]}
-          placeholder="ساعات مرخصی"
+          placeholder="مدت زمان مرخصی به "
           type="number"
           minLen="0"
           name={"leaveHours"}
           containerStyle="mt-4"
-          label={"ساعات مرخصی"}
+          stepLen="1"
+          label={"مدت زمان مرخصی ( دقیقه )"}
           value={dailyReportForm.leaveHours}
           onInputChange={(name, value) => {
             reportFieldChange(name, value);
           }}
         />
-        <InputText
-          error={formErrors["overtime"]}
-          placeholder="ساعات اضافه"
-          type="number"
-          minLen="0"
-          name={"overtime"}
-          containerStyle="mt-4"
-          label={"ساعات اضافه"}
-          value={dailyReportForm.overtime}
-          onInputChange={(name, value) => {
-            reportFieldChange(name, value);
-          }}
-        />
-        <InputText
-          placeholder="توضیحات"
-          type="textarea"
+        <Textarea
           name={"description"}
           containerStyle="mt-4"
           label={"توضیحات"}

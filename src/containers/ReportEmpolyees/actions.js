@@ -9,6 +9,7 @@ import { allFieldsValidation } from "../../utils/validation";
 import { toast } from "react-toastify";
 import handleError from "../../utils/error";
 import axios from "axios";
+import { calculateWorkTimes } from "../../utils/time";
 export const reportFieldChange = (name, value) => {
   let newVal = value;
   if (name === "date") {
@@ -43,34 +44,42 @@ export const fetchReportsHandle = () => {
   }
 }
 
-export const saveReport = (method, url, formData) => {
+export const saveReport = (method, url) => {
   return async (dispatch, getState) => {
     const rules = {
       employeeId: "required",
-      workHours: "required",
+      startWorkTime: "required",
+      endWorkTime: "required",
       leaveHours: "required",
       date: "required",
-      overtime: "required",
     };
-
-    const { isValid, errors } = allFieldsValidation(formData, rules, {
+    let dailyReportForm = getState().reportEmployees.dailyReportForm;
+    const { isValid, errors } = allFieldsValidation(dailyReportForm, rules, {
       "required.employeeId": "نام کاربری را وارد کنید",
-      "required.workHours": "ساعات کاری را وارد کنید",
+      "required.startWorkTime": "ساعات شروع را وارد کنید",
       "required.leaveHours": "مرخصی را وارد کنید",
       "required.date": "تاریخ را وارد کنید",
-      "required.overtime": "اضافه کاری را وارد کنید",
+      "required.endWorkTime": "ساعت پایان را وارد کنید",
     });
     if (!isValid) {
       return dispatch({ type: SET_REPORT_FORM_ERRORS, payload: errors });
     }
+    const {endWorkTime , startWorkTime , leaveHours} = dailyReportForm
+    if (endWorkTime <= startWorkTime) {
+      return toast.warning("ساعت پایان باید بعد از شروع باشد");
+    }
     dispatch({ type: SET_REPORT_FORM_ERRORS, payload: {} });
+    const {worked,overtime} = calculateWorkTimes(startWorkTime , endWorkTime , leaveHours)
+    dispatch(reportFieldChange("workHours",worked))
+    dispatch(reportFieldChange("overtime",overtime))
+    dailyReportForm = getState().reportEmployees.dailyReportForm;
 
     // اعتبارسنجی ساده فرم، مشابه الگوی ورود
     try {
       const response = await axios({
         method,
         url,
-        data: formData
+        data: dailyReportForm
       });
       dispatch(fetchReportsHandle())
       dispatch({ type: RESET_DAILY_REPORT_FORM });
@@ -112,14 +121,12 @@ export const submitFilterReport = () => {
 
 export const newReportHandle = () => {
   return (dispatch, getState) => {
-    const dailyReportForm = getState().reportEmployees.dailyReportForm;
-    return dispatch(saveReport('post', '/api/report/new', dailyReportForm))
+    return dispatch(saveReport('post', '/api/report/new'))
   }
 }
 
 export const editReportHandle = reportId => {
   return (dispatch, getState) => {
-    const { filterReportForm } = getState().reportEmployees;
-    return dispatch(saveReport('patch', `/api/report/edit/${reportId}`, filterReportForm))
+    return dispatch(saveReport('patch', `/api/report/edit/${reportId}`))
   }
 }

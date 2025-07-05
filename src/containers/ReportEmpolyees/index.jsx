@@ -13,6 +13,7 @@ import { formatThousand } from "../../utils/numbers";
 import ErrorText from "../../components/Typography/ErrorText";
 import  {useExportExcel} from "@/hooks/useExportExcel";
 import ChevronDownIcon from "@heroicons/react/24/outline/ChevronDownIcon";
+import { formatMinutes } from "../../utils/time";
 
 function ReportEmpolyees(props) {
   const { dataFilteredReports, fetchReportsHandle, filterReportForm, fetchHandleEmployees, formErrors, fetchEmployees, reportFilterFieldChange, submitFilterReport, isLoading, legalSettingFormData, getLegalSetting} = props;
@@ -138,9 +139,9 @@ function ReportEmpolyees(props) {
                 <tr key={index}>
                   <td>{emp.employeeId?.name + " " + emp.employeeId?.personalCode}</td>
                   <td>{emp.date?.split("T")[0]}</td>
-                  <td>{emp.workHours}</td>
+                  <td>{formatMinutes(emp.workHours)}</td>
                   <td>{emp.leaveHours}</td>
-                  <td>{emp.overtime}</td>
+                  <td>{formatMinutes(emp.overtime)}</td>
                   <td className="hidden">{emp.description}</td>
                 </tr>
               )
@@ -150,9 +151,9 @@ function ReportEmpolyees(props) {
             <tr className="font-bold">
               <td>جمع کل</td>
               <td></td>
-              <td>{totals.workHours}</td>
+              <td>{formatMinutes(totals.workHours)}</td>
               <td>{totals.leaveHours}</td>
-              <td>{totals.overtime}</td>
+              <td>{formatMinutes(totals.overtime)}</td>
             </tr>
             {totals && <tr className="font-bold">
               <td>{`مبلغ کل : ${formatThousand(hourlyRateTotal + overrtimeRateTotal)}`}</td>

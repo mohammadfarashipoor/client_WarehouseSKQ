@@ -1,26 +1,18 @@
 import ErrorText from "../../Typography/ErrorText";
 
-function InputText({
+function Textarea({
   label,
   labelStyle,
   value,
   name,
-  type,
   containerStyle,
   placeholder,
   disableValue,
   error,
-  onInputChange,
-  minLen=null,
-  maxLen=null,
-  stepLen=null
+  onInputChange, 
 }) {
   const _onChange = (e) => {
-    if (e.target.name == "image") {
-      onInputChange(e.target.name, e.target.files[0]);
-    } else {
-      onInputChange(e.target.name, e.target.value);
-    }
+    onInputChange(e.target);
   };
   return (
     <div className={`form-control w-full ${containerStyle}`}>
@@ -29,24 +21,18 @@ function InputText({
           {label}
         </span>
       </label>
-      <input
-        type={type || "text"}
-        value={value}
+      <textarea className="textarea textarea-bordered" 
         name={name}
-        disabled={disableValue}
+        value={value}
         placeholder={placeholder || ""}
-        min={minLen}
-        max={maxLen}
-        step={stepLen}
-        inputMode={type == "number" && "numeric"}
+        disabled={disableValue}
         onChange={(e) => {
-          _onChange(e);
+            _onChange(e);
         }}
-        className={`input input-bordered w-full `}
-      />
+      ></textarea>
       <ErrorText className="text-error">{error && error[0]}</ErrorText>
     </div>
   );
 }
 
-export default InputText;
+export default Textarea;

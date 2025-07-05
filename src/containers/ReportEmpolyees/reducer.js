@@ -12,7 +12,9 @@ const initialState = {
     employeeName: "",
     date: {},
     workHours: "",
-    leaveHours: "",
+    leaveHours: 0,
+    startWorkTime:"08:00",
+    endWorkTime:"17:00",
     overtime: "",
     description:""
   },
