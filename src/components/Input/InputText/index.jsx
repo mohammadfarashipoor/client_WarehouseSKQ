@@ -38,7 +38,7 @@ function InputText({
         min={minLen}
         max={maxLen}
         step={stepLen}
-        inputMode={type == "number" && "numeric"}
+        inputMode={type == "number" ? "numeric" : "text"}
         onChange={(e) => {
           _onChange(e);
         }}

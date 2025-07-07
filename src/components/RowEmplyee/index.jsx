@@ -35,9 +35,6 @@ function RowEmplyee(props) {
             <EllipsisHorizontalIcon className="w-5 h-5" />
           </button>
           <ul className="menu menu-compact dropdown-content  shadow bg-base-200 rounded-box w-52 z-10">
-            <li>
-              <button onClick={handleReviewRecords}>بررسی سوابق</button>
-            </li>
             <li >
               <button onClick={handleContract}>شرح قرارداد</button>
             </li>

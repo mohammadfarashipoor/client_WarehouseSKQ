@@ -36,7 +36,7 @@ function SubMenu({ submenu, title, icon }) {
 
       {/** Submenu list */}
       <div className={` w-full ` + (isExpanded ? "" : "hidden")}>
-        <ul className={`menu menu-compact`}>
+        <ul className={`menu menu-compact gap-1`}>
           {submenu.map((m, k) => {
             return (
               <li key={k}>

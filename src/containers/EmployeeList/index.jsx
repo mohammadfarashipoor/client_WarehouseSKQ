@@ -43,7 +43,7 @@ function EmployeeList(props) {
       title="فهرست کارکنان"
       leftBtn={true}
       handleBtn={() => setShowAddModal(true)}
-      titleBtn={"جذب و استخدام"}
+      titleBtn={"افزودن"}
     >
       <div className="overflow-x-auto h-[80vh]">
         <table className="table table-xs table-pin-rows table-pin-cols">

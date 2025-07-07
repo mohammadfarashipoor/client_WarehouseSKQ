@@ -18,9 +18,8 @@ function NotificationCard({ message, onMarkAsRead }) {
     };
     return (
         <div className="card bg-base-100 shadow-lg my-4 relative">
-            <div className="card-body w-[7cm] p-0">
+            <div className="card-body w-[7cm] p-0" onClick={toggleExpand}>
                 <button
-                    onClick={toggleExpand}
                     className="absolute top-0 left-0 transform transition-transform duration-300 p-2"
                     style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
                     aria-label="Toggle Full Message"
