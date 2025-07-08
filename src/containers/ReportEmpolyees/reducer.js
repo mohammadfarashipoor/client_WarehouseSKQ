@@ -3,7 +3,11 @@ import {
   REPORT_FIELD_CHANGE,
   RESET_DAILY_REPORT_FORM,
   ADD_REPORT,
-  SET_REPORT_FORM_ERRORS, FILTER_FIELD_CHANGE , SET_REPORT_LOADING , DATA_FILTERED_REPORTS
+  SET_REPORT_FORM_ERRORS, 
+  FILTER_FIELD_CHANGE ,
+   SET_REPORT_LOADING , 
+   DATA_FILTERED_REPORTS,
+   ADD_SUMMARY
 } from "./constants";
 
 const initialState = {
@@ -24,6 +28,7 @@ const initialState = {
   },
   dataFilteredReports: [],
   reports: [],
+  summary:{},
   formErrors: {},
   isLoading: false,
   selectedMonth: "",
@@ -56,7 +61,11 @@ const ReportEmpolyeesReducer = (state = initialState, action) => {
         ...state,
         reports: action.payload,
       };
-
+    case ADD_SUMMARY:
+      return {
+        ...state,
+        summary: action.payload,
+      };
     case SET_REPORT_FORM_ERRORS:
       return {
         ...state,

@@ -3,6 +3,7 @@ import InputCheckBox from "../../components/Input/InputCheckBox";
 import InputFile from "../../components/Input/InputFile";
 import { onUpload } from "../../utils/storage";
 import InputText from "@/components/Input/InputText";
+import { toTomanWords } from "../../utils/numbers";
 
 function NewEmployeeModal(props) {
     const { editMode,
@@ -105,6 +106,21 @@ function NewEmployeeModal(props) {
                     }}
                     disableValue={isSubmitting}
                 />
+                <InputText
+                    type="number"
+                    error={formErrors["hourlyRate"]}
+                    placeholder={"100,000 ریال"}
+                    name={"hourlyRate"}
+                    containerStyle="mt-4"
+                    label={"نرخ حقوق ساعتی"}
+                    value={newEmployeeFormData.hourlyRate}
+                    onInputChange={(name, value) => {
+                        newEmployeeChange(name, value);
+                    }}
+                    disableValue={isSubmitting}
+                />
+                {newEmployeeFormData.hourlyRate && <span className="my-2">{toTomanWords(newEmployeeFormData.hourlyRate)}</span>}
+                
                 <InputFile
                     type="file"
                     error={formErrors["contractPath"]}

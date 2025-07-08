@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import actions from "@/context/actions";
 import TitleCard from "@/components/TitleCard";
 import InputSelect from "../../components/Input/InputSelect";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_en from "react-date-object/locales/persian_en";
@@ -16,7 +16,7 @@ import ChevronDownIcon from "@heroicons/react/24/outline/ChevronDownIcon";
 import { formatMinutes } from "../../utils/time";
 
 function ReportEmpolyees(props) {
-  const { dataFilteredReports, fetchReportsHandle, filterReportForm, fetchHandleEmployees, formErrors, fetchEmployees, reportFilterFieldChange, submitFilterReport, isLoading, legalSettingFormData, getLegalSetting} = props;
+  const { dataFilteredReports, fetchReportsHandle, filterReportForm, fetchHandleEmployees, formErrors, fetchEmployees, reportFilterFieldChange, submitFilterReport, isLoading, summary, getLegalSetting} = props;
   useEffect(() => {
     fetchHandleEmployees()
     fetchReportsHandle()
@@ -29,19 +29,6 @@ function ReportEmpolyees(props) {
     fileName: `گزارش_${filterReportForm.datePickerFilter}`,
     sheetName: 'گزارش‌ها'
   });
-  const totals = useMemo(() => {
-    return dataFilteredReports.reduce(
-      (acc, r) => {
-        // فرض: ردیف‌ها به صورت استرینگ هستند؛ پس parseFloat:
-        acc.workHours += parseFloat(r.workHours || 0);
-        acc.leaveHours += parseFloat(r.leaveHours || 0);
-        acc.overtime += parseFloat(r.overtime || 0);
-        return acc;
-      },
-      { workHours: 0, leaveHours: 0, overtime: 0 }
-    );
-  }, [dataFilteredReports]);
-
   function extractLabelValue(data) {
     return data.map(({ name, _id }) => ({
       label: name,
@@ -52,11 +39,8 @@ function ReportEmpolyees(props) {
   function handleSubmit(event) {
     event.preventDefault();
     submitFilterReport();
-  }
-  const {hourlyRate}= legalSettingFormData
-  const overtimeRate= hourlyRate * 1.5
-  const hourlyRateTotal = totals.workHours * hourlyRate
-  const overrtimeRateTotal = totals.overtime * overtimeRate
+    } 
+
   return (
     <TitleCard title="مدیریت گزارش ماهانه">
       <form onSubmit={handleSubmit} >
@@ -135,7 +119,9 @@ function ReportEmpolyees(props) {
           </thead>
           <tbody>
             {dataFilteredReports && dataFilteredReports.map(
-              (emp, index) => (
+
+              (emp, index) => {
+                return(
                 <tr key={index}>
                   <td>{emp.employeeId?.name + " " + emp.employeeId?.personalCode}</td>
                   <td>{emp.date?.split("T")[0]}</td>
@@ -144,23 +130,23 @@ function ReportEmpolyees(props) {
                   <td>{formatMinutes(emp.overtime)}</td>
                   <td className="hidden">{emp.description}</td>
                 </tr>
-              )
+              )}
             )}
           </tbody>
           <tfoot>
             <tr className="font-bold">
               <td>جمع کل</td>
               <td></td>
-              <td>{formatMinutes(totals.workHours)}</td>
-              <td>{totals.leaveHours}</td>
-              <td>{formatMinutes(totals.overtime)}</td>
+              <td>{formatMinutes(summary.totalWorkMin)}</td>
+              <td>{summary.totalLeave}</td>
+              <td>{formatMinutes(summary.totalOvertimeMin)}</td>
             </tr>
-            {totals && <tr className="font-bold">
-              <td>{`مبلغ کل : ${formatThousand(hourlyRateTotal + overrtimeRateTotal)}`}</td>
+            {summary && <tr className="font-bold">
+              <td>{`مبلغ کل : ${formatThousand(summary.totalPayment)}`}</td>
               <td></td>
-              <td>{formatThousand(hourlyRateTotal)}</td>
-              <td>{totals.leaveHours}</td>
-              <td>{formatThousand(overrtimeRateTotal)}</td>
+              <td>{formatThousand(summary.totalWork)}</td>
+              <td>{summary.totalLeave	}</td>
+              <td>{formatThousand(summary.totalOvertime)}</td>
             </tr>}
           </tfoot>
         </table>
@@ -172,6 +158,7 @@ function ReportEmpolyees(props) {
 const mapStateToProps = (state) => ({
   dailyReportForm: state.reportEmployees.dailyReportForm,
   reports: state.reportEmployees.reports,
+  summary: state.reportEmployees.summary,
   filterReportForm: state.reportEmployees.filterReportForm,
   formErrors: state.reportEmployees.formErrors,
   isLoading: state.reportEmployees.isLoading,

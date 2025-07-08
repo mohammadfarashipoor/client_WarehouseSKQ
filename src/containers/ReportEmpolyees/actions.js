@@ -3,7 +3,8 @@ import {
   REPORT_FIELD_CHANGE,
   RESET_DAILY_REPORT_FORM,
   ADD_REPORT,
-  SET_REPORT_FORM_ERRORS, DATA_FILTERED_REPORTS, FILTER_FIELD_CHANGE
+  SET_REPORT_FORM_ERRORS, DATA_FILTERED_REPORTS, FILTER_FIELD_CHANGE,
+  ADD_SUMMARY
 } from "./constants";
 import { allFieldsValidation } from "../../utils/validation";
 import { toast } from "react-toastify";
@@ -112,6 +113,7 @@ export const submitFilterReport = () => {
       } = filterReportForm
       const response = await axios.post("/api/report/by-month", { datePickerFilter,personalCode });
       dispatch(handleDataFilteredReports(response.data.reports))
+      dispatch({ type: ADD_SUMMARY, payload: response.data?.summary });
     } catch (error) {
       const title = `مشکلی پیش آمده دوباره تلاش کنید`;
       handleError(error, dispatch, title);

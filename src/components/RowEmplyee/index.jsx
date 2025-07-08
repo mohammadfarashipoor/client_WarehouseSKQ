@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { onDownload } from "../../utils/storage";
 
 function RowEmplyee(props) {
-  const { _id, num, personalCode, position, name, contractURL, status, contractPath, handleEditEmployeeModal, deleteEmployeeHandle } = props
+  const { _id, num, personalCode, position, name, contractURL, status, hourlyRate, contractPath, handleEditEmployeeModal, deleteEmployeeHandle } = props
   const navigate = useNavigate();
 
   const handleReviewRecords = () => {
@@ -14,7 +14,7 @@ function RowEmplyee(props) {
     onDownload(contractURL)
   }
   const handleEdit = () => {
-    handleEditEmployeeModal({ _id, personalCode, position, name, contractURL, contractPath, status })
+    handleEditEmployeeModal({ _id, personalCode, position, name, contractURL, contractPath,hourlyRate, status })
   }
   return (
     <tr>

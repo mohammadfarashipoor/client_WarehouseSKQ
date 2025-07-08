@@ -61,6 +61,7 @@ export const saveEmployee = (method, url, formData) => {
             personalCode: 'required',
             position: 'required',
             contractPath: 'required',
+            hourlyRate: 'required',
         };
 
         const { isValid, errors } = allFieldsValidation(formData, rules, {
@@ -68,6 +69,7 @@ export const saveEmployee = (method, url, formData) => {
             "required.personalCode": "کد پرسنلی را وارد کنید",
             "required.position": "سمت را وارد کنید",
             "required.contractPath": "قرارداد را وارد کنید",
+            "required.hourlyRate": "مبلغ را وارد کنید",
         });
         if (!isValid) {
             dispatch({ type: SET_EMPLOYEE_FORM_ERRORS, payload: errors });
