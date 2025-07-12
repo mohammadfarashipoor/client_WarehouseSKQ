@@ -106,6 +106,8 @@ export const submitFilterReport = () => {
     if (!isValid) {
       return dispatch({ type: SET_REPORT_FORM_ERRORS, payload: errors });
     }
+    dispatch({ type: SET_REPORT_FORM_ERRORS, payload: {} });
+
     try {
       const {
         datePickerFilter,

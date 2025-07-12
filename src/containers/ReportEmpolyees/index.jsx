@@ -13,7 +13,9 @@ import { formatThousand } from "../../utils/numbers";
 import ErrorText from "../../components/Typography/ErrorText";
 import  {useExportExcel} from "@/hooks/useExportExcel";
 import ChevronDownIcon from "@heroicons/react/24/outline/ChevronDownIcon";
+import MagnifyingGlassIcon from "@heroicons/react/24/outline/MagnifyingGlassIcon";
 import { formatMinutes } from "../../utils/time";
+import EmptyPage from "../../components/EmptyPage";
 
 function ReportEmpolyees(props) {
   const { dataFilteredReports, fetchReportsHandle, filterReportForm, fetchHandleEmployees, formErrors, fetchEmployees, reportFilterFieldChange, submitFilterReport, isLoading, summary, getLegalSetting} = props;
@@ -40,12 +42,11 @@ function ReportEmpolyees(props) {
     event.preventDefault();
     submitFilterReport();
     } 
-
   return (
     <TitleCard title="مدیریت گزارش ماهانه">
-      <form onSubmit={handleSubmit} >
+      <form className="flex gap-2 flex-col flex-wrap md:flex-row" onSubmit={handleSubmit} >
         {/* بخش گزارش ماهانه */}
-        <div className="mb-4">
+        <div className="flex-auto">
           <DatePicker
             calendar={persian}
             locale={persian_en}
@@ -65,22 +66,22 @@ function ReportEmpolyees(props) {
               <ErrorText className="text-error">{formErrors["datePickerFilter"]}</ErrorText>
             )}
         </div>
-        <div className="mb-4">
+        <div className="flex-auto">
           <InputSelect name={'personalCode'}
             value={filterReportForm.personalCode}
             placeholder={'کارمند مورد نظر رو انتخاب کنید'}
             error={formErrors["personalCode"]}
-            options={EmployeeOptions} label={'نام کارمند'} onInputChange={(name, value) => {
+            options={EmployeeOptions}
+            onInputChange={(name, value) => {
               reportFilterFieldChange(name, value);
             }} />
         </div>
-      <div className="flex  w-full items-center gap-2">
-      <button type="submit" className="btn btn-primary w-[90%]">
-        نمایش
-      </button>
-
-      <div className="dropdown dropdown-end w-[10%]">
-        <label tabIndex={0} className="btn ">
+        <div className="flex gap-2">
+        <button type="submit" className="btn btn-primary flex-[0_1_90%] md:flex-[0_1_0]">
+        <MagnifyingGlassIcon className="w-5 h-5"/>
+        </button>
+        <div className="dropdown dropdown-end flex-[0_1_10%] md:flex-[0_1_0]">
+        <label tabIndex={0} className="btn">
         <ChevronDownIcon
           className={
             "w-5 h-5 mt-1 float-right delay-400 duration-500 transition-all  " 
@@ -101,11 +102,11 @@ function ReportEmpolyees(props) {
             </button>
           </li>
         </ul>
+        </div>
       </div>
-    </div>
       </form>
 
-      <div className="overflow-x-auto">
+      {dataFilteredReports[0] ? <div className="overflow-x-auto">
         <table className="table w-full" ref={tableRef}>
           <thead>
             <tr>
@@ -118,7 +119,7 @@ function ReportEmpolyees(props) {
             </tr>
           </thead>
           <tbody>
-            {dataFilteredReports && dataFilteredReports.map(
+            {dataFilteredReports.map(
 
               (emp, index) => {
                 return(
@@ -150,7 +151,7 @@ function ReportEmpolyees(props) {
             </tr>}
           </tfoot>
         </table>
-      </div>
+      </div> : <EmptyPage className="mt-4" message="گزارش یافت نشد!"/>}
     </TitleCard>
   );
 }
