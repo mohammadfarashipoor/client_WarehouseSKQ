@@ -41,6 +41,11 @@ function EventModal(props) {
         }
 
     }
+    const onCloseHandle = () => {
+        newEventChange("title", "")
+        newEventChange("description", "")
+        onClose()
+    }
     if (!visible) return null;
     return (
         <div className="modal modal-open" onClick={onClose}>
@@ -77,9 +82,7 @@ function EventModal(props) {
                                 <li key={i}>
                                     <details className="collapse bg-base-200">
                                         <summary className="collapse-title !flex justify-between group">
-                                            <span className="flex-auto">{new DateObject(evt.date)
-                                                .convert(persian, persian_fa)
-                                                .format("YYYY/MM/DD")}{" "}
+                                            <span className="flex-auto">{evt.date}{" "}
                                                 – {evt.title}</span>
                                             <button className="hidden btn-outline rounded-full p-1 group-hover:inline" onClick={() => editEvent(evt)}><PencilIcon className="w-5 h-5" /></button>
                                             <button className="hidden btn-outline btn-error rounded-full p-1 mr-2 group-hover:inline" onClick={() => deleteEventHandle(evt._id)}><TrashIcon className="w-5 h-5" /></button>
@@ -97,9 +100,9 @@ function EventModal(props) {
 
                 <div className="modal-action flex justify-between mt-4">
                     <button className="btn btn-primary" onClick={onSubmit}>
-                        ذخیره
+                        {editModeId ? "ویرایش" : "ذخیره"}
                     </button>
-                    <button className="btn" onClick={onClose}>انصراف</button>
+                    <button className="btn" onClick={onCloseHandle}>انصراف</button>
                 </div>
             </div>
         </div>

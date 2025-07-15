@@ -4,7 +4,6 @@ import { CalendarIcon } from "@heroicons/react/24/outline";
 import actions from "@/context/actions";
 import { connect } from "react-redux";
 import EventModal from "../../components/EventModal";
-import { dateObjectToISO } from "../../utils/date";
 import { DateObject } from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
@@ -19,7 +18,6 @@ function EventReminder(props) {
         fetchHandleEvents()
     }, [])
     useEffect(() => {
-
         fetchEventsByDateHandle(new DateObject(selectedDate)
             .convert(persian, persian_en)
             .format("YYYY/MM/DD"))
@@ -29,9 +27,8 @@ function EventReminder(props) {
         const map = {};
         fetchEvents.forEach(evt => {
             // فرض: evt.date یک ISO string است
-            const p = new DateObject(evt.date)
-                .convert(persian, persian_fa);
-            map[p.format("YYYY/MM/DD")] = true;
+            const p = evt.date;
+            map[p] = true;
         });
         return map;
     }, [fetchEvents]);
