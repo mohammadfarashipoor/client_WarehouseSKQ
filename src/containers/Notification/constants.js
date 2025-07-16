@@ -4,8 +4,6 @@
  *
  */
 
-export const ADD_NOTIFICATION = 'src/Notification/ADD_NOTIFICATION';
-export const REMOVE_NOTIFICATION  = 'src/Notification/REMOVE_NOTIFICATION ';
-export const MARK_AS_READ = 'src/Notification/MARK_AS_READ';
+export const FETCH_NOTIFICATION = 'src/Notification/FETCH_NOTIFICATION';
+export const FETCH_NOTIFICATION_ACTIVE = 'src/Notification/FETCH_NOTIFICATION_ACTIVE';
 export const SET_LOADING = 'src/Notification/SET_LOADING';
-export const SET_ERROR = 'src/Notification/SET_ERROR';

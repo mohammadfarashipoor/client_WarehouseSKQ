@@ -13,7 +13,8 @@ import * as employee from "@/containers/EmployeeList/actions";
 import * as reporEmpolyees from "@/containers/ReportEmpolyees/actions";
 import * as customer from "@/containers/CustomersList/actions";
 import * as profileSetting from "@/containers/ProfileSetting/actions";
-import * as EventReminder from "@/containers/EventReminder/actions";
+import * as eventReminder from "@/containers/EventReminder/actions";
+import * as notification from "@/containers/Notification/actions";
 
 export default function mapDispatchToProps(dispatch) {
   return bindActionCreators(
@@ -25,7 +26,8 @@ export default function mapDispatchToProps(dispatch) {
       ...reporEmpolyees,
       ...customer,
       ...profileSetting,
-      ...EventReminder
+      ...eventReminder,
+      ...notification
     },
     dispatch
   );

@@ -1,35 +1,41 @@
-// اضافه کردن اعلان جدید
-export const addNotification = (notification) => ({
-  type: "ADD_NOTIFICATION",
-  payload: notification, // notification: شیئی شامل id, message, type, timestamp, isRead و سایر اطلاعات مورد نیاز
-});
+import { FETCH_NOTIFICATION, FETCH_NOTIFICATION_ACTIVE } from "./constants";
+import handleError from "../../utils/error";
+import axios from "axios";
 
-// حذف یک اعلان بر اساس شناسه
-export const removeNotification = (notificationId) => ({
-  type: "REMOVE_NOTIFICATION",
-  payload: { id: notificationId },
-});
+export const fetchNotificationHandle = () => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await axios.get("/api/notification/all");
+            dispatch({
+                type: FETCH_NOTIFICATION,
+                payload: response.data?.notifications
+            })
+        } catch (error) {
+            const title = `در دریافت اعلان ها مشکلی رخ داده دوباره تلاش کنید`;
+            handleError(error, dispatch, title);
+        }
 
-// علامت‌گذاری یک اعلان به عنوان خوانده شده
-export const markAsRead = (notificationId) => ({
-  type: "MARK_AS_READ",
-  payload: { id: notificationId },
-});
+    }
+}
 
+export const fetchNotificationActiveHandle = () => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await axios.get("/api/notification/active");
+            dispatch({
+                type: FETCH_NOTIFICATION_ACTIVE,
+                payload: response.data?.notifications
+            })
+
+        } catch (error) {
+            const title = `در دریافت اعلان ها مشکلی رخ داده دوباره تلاش کنید`;
+            handleError(error, dispatch, title);
+        }
+
+    }
+}
 // تغییر وضعیت بارگذاری
 export const setLoading = (isLoading) => ({
   type: "SET_LOADING",
   payload: isLoading, // مقدار بولی: true یا false
-});
-
-// ثبت یا حذف خطا
-export const setError = (error) => ({
-  type: "SET_ERROR",
-  payload: error, // می‌تواند یک پیام خطا یا null باشد
-});
-
-// (اختیاری) تنظیم فیلتر برای اعلان‌ها، در صورتی که در state از فیلتر استفاده کنید.
-export const setFilterType = (filterType) => ({
-  type: "SET_FILTER_TYPE",
-  payload: filterType, // به عنوان مثال: "all", "unread", "success", "error"
 });

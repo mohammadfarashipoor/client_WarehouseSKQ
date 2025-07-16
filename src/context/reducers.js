@@ -15,6 +15,7 @@ import employeeReducer from "@/containers/EmployeeList/reducer";
 import customerReducer from "@/containers/CustomersList/reducer";
 import profileSettingReducer from "@/containers/ProfileSetting/reducer";
 import eventReminderReducer from "@/containers/EventReminder/reducer";
+import notificationsReducer from "@/containers/Notification/reducer";
 
 const createReducer = () =>
   combineReducers({
@@ -26,6 +27,7 @@ const createReducer = () =>
     customer: customerReducer,
     profileSetting: profileSettingReducer,
     event: eventReminderReducer,
+    notification:notificationsReducer
   });
 
 export default createReducer;

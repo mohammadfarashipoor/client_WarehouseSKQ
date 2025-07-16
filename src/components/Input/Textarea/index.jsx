@@ -12,7 +12,7 @@ function Textarea({
   onInputChange, 
 }) {
   const _onChange = (e) => {
-    onInputChange(e.target);
+    onInputChange(e.target.name,e.target.value);
   };
   return (
     <div className={`form-control w-full ${containerStyle}`}>
