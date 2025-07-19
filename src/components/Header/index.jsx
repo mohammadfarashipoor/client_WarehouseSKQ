@@ -11,7 +11,7 @@ import { signOut } from "@/containers/Login/actions";
 import { useDispatch } from "react-redux";
 import DigitalClockWithJalali from "../DigitalClockWithDate";
 import CalculatorModal from "../CalculatorModal";
-import Notification from "../../containers/Notification";
+import NotificationUnread from "../../containers/NotificationUnread";
 import EventReminder from "@/containers/EventReminder";
 
 function Header() {
@@ -35,7 +35,6 @@ function Header() {
   }, []);
 
   // Opening right sidebar for notification
-  const openNotification = () => { };
 
   return (
     <div className="navbar sticky top-0 bg-base-100  z-10 shadow-md ">
@@ -76,7 +75,7 @@ function Header() {
         </label>
 
         {/* Notification icon */}
-       <Notification />
+       <NotificationUnread />
        
 
         {/* Profile icon, opening menu on click */}

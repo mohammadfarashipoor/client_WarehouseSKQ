@@ -18,10 +18,10 @@ export const fetchNotificationHandle = () => {
     }
 }
 
-export const fetchNotificationActiveHandle = () => {
+export const fetchNotificationUnReadHandle = () => {
     return async (dispatch, getState) => {
         try {
-            const response = await axios.get("/api/notification/active");
+            const response = await axios.get("/api/notification/unread");
             dispatch({
                 type: FETCH_NOTIFICATION_ACTIVE,
                 payload: response.data?.notifications
@@ -34,8 +34,21 @@ export const fetchNotificationActiveHandle = () => {
 
     }
 }
+
+export const markAsReadNotificationHandle = (id) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await axios.patch(`/api/notification/mark-as-read/${id}`, { markAsRead: true });
+            dispatch(fetchNotificationUnReadHandle())
+        } catch (error) {
+            const title = `در دریافت اعلان ها مشکلی رخ داده دوباره تلاش کنید`;
+            handleError(error, dispatch, title);
+        }
+
+    }
+}
 // تغییر وضعیت بارگذاری
 export const setLoading = (isLoading) => ({
-  type: "SET_LOADING",
-  payload: isLoading, // مقدار بولی: true یا false
+    type: "SET_LOADING",
+    payload: isLoading, // مقدار بولی: true یا false
 });

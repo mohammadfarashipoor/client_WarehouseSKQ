@@ -1,19 +1,19 @@
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 
-function NotificationCard({ message, onMarkAsRead }) {
+function NotificationCard(props) {
     const [expanded, setExpanded] = useState(false);
     const toggleExpand = () => setExpanded(prev => !prev);
+    const { _id, title, message, onMarkAsRead, maxLength = 30 } = props
 
     // در اینجا threshold برابر با 100 کاراکتر در نظر گرفته شده است.
-    const maxLength = 100;
     const isLong = message.length > maxLength;
     const displayedText = expanded || !isLong ? message : message.slice(0, maxLength) + '...';
 
     // اگر تابع onMarkAsRead ارسال نشده باشد، یک تابع پیش‌فرض اجرا می‌شود.
     const markAsRead = () => {
         if (onMarkAsRead) {
-            onMarkAsRead();
+            onMarkAsRead(_id);
         }
     };
     return (
@@ -24,9 +24,12 @@ function NotificationCard({ message, onMarkAsRead }) {
                     style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
                     aria-label="Toggle Full Message"
                 >
-                    <ChevronDownIcon className='w-5 h-5'/>
+                    <ChevronDownIcon className='w-5 h-5' />
                 </button>
-                <p>
+                <p className='font-semibold'>
+                    {title}
+                </p>
+                <p className='text-wrap'>
                     {displayedText}
                 </p>
 
