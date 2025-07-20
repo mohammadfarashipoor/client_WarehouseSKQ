@@ -5,6 +5,7 @@ import actions from "@/context/actions";
 import { connect } from "react-redux";
 
 import NewEmployeeModal from "../../components/NewEmployeeModal";
+import NoContent from "../../components/NoContent";
 function EmployeeList(props) {
   const {
     newEmployeeFormData,
@@ -46,7 +47,7 @@ function EmployeeList(props) {
       titleBtn={"افزودن"}
     >
       <div className="overflow-x-auto h-[80vh]">
-        <table className="table table-xs table-pin-rows table-pin-cols">
+        {!fetchEmployees ? <NoContent/> : (<table className="table table-xs table-pin-rows table-pin-cols">
           <thead>
             <tr className="z-0">
               <th></th>
@@ -76,7 +77,7 @@ function EmployeeList(props) {
               <th>عملیات</th>
             </tr>
           </tfoot>
-        </table>
+        </table>)}
       </div>
 
       {/* مودال افزودن کارمند جدید */}

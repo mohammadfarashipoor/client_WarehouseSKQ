@@ -16,6 +16,7 @@ import ChevronDownIcon from "@heroicons/react/24/outline/ChevronDownIcon";
 import MagnifyingGlassIcon from "@heroicons/react/24/outline/MagnifyingGlassIcon";
 import { formatMinutes } from "../../utils/time";
 import EmptyPage from "../../components/EmptyPage";
+import NoContent from "../../components/NoContent";
 
 function ReportEmpolyees(props) {
   const { dataFilteredReports, fetchReportsHandle, filterReportForm, fetchHandleEmployees, formErrors, fetchEmployees, reportFilterFieldChange, submitFilterReport, isLoading, summary, getLegalSetting} = props;
@@ -151,7 +152,7 @@ function ReportEmpolyees(props) {
             </tr>}
           </tfoot>
         </table>
-      </div> : <EmptyPage className="mt-4" message="گزارش یافت نشد!"/>}
+      </div> : <NoContent className="mt-4" message="گزارش یافت نشد!"/>}
     </TitleCard>
   );
 }
