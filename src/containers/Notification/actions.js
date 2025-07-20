@@ -40,8 +40,22 @@ export const markAsReadNotificationHandle = (id) => {
         try {
             const response = await axios.patch(`/api/notification/mark-as-read/${id}`, { markAsRead: true });
             dispatch(fetchNotificationUnReadHandle())
+            dispatch(fetchNotificationHandle())
         } catch (error) {
             const title = `در دریافت اعلان ها مشکلی رخ داده دوباره تلاش کنید`;
+            handleError(error, dispatch, title);
+        }
+
+    }
+}
+
+export const deleteNotificationHandle = (id) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await axios.delete(`/api/notification/${id}`);
+            dispatch(fetchNotificationHandle())
+        } catch (error) {
+            const title = `در حذف اعلان ها مشکلی رخ داده دوباره تلاش کنید`;
             handleError(error, dispatch, title);
         }
 
