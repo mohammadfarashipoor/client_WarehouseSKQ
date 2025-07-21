@@ -4,7 +4,8 @@ import {
   RESET_DAILY_REPORT_FORM,
   ADD_REPORT,
   SET_REPORT_FORM_ERRORS, DATA_FILTERED_REPORTS, FILTER_FIELD_CHANGE,
-  ADD_SUMMARY
+  ADD_SUMMARY,
+  PAGINATION_REPORT
 } from "./constants";
 import { allFieldsValidation } from "../../utils/validation";
 import { toast } from "react-toastify";
@@ -33,11 +34,12 @@ export const handleDataFilteredReports = (value) => {
     payload: value,
   }
 }
-export const fetchReportsHandle = () => {
+export const fetchReportsHandle = (page = 1) => {
   return async (dispatch, getState) => {
     try {
-      const response = await axios.get("/api/report/all");
+      const response = await axios.get(`/api/report/all/?page=${page}`);
       dispatch({ type: ADD_REPORT, payload: response.data?.reports });
+      dispatch({ type: PAGINATION_REPORT, payload: response.data?.pagination });
     } catch (error) {
       const title = `دریافت گزارش ها با مشکلی مواجه شد دوباره تلاش کنید`;
       handleError(error, dispatch, title);
@@ -93,7 +95,7 @@ export const saveReport = (method, url) => {
 };
 
 
-export const submitFilterReport = () => {
+export const submitFilterReport = (page = 1) => {
   return async (dispatch, getState) => {
     const rules = {
       datePickerFilter: "required",
@@ -113,9 +115,11 @@ export const submitFilterReport = () => {
         datePickerFilter,
         personalCode
       } = filterReportForm
-      const response = await axios.post("/api/report/by-month", { datePickerFilter,personalCode });
+      const response = await axios.post(`/api/report/by-month/?page=${page}`, { datePickerFilter,personalCode });
       dispatch(handleDataFilteredReports(response.data.reports))
       dispatch({ type: ADD_SUMMARY, payload: response.data?.summary });
+      dispatch({ type: PAGINATION_REPORT, payload: response.data?.pagination });
+
     } catch (error) {
       const title = `مشکلی پیش آمده دوباره تلاش کنید`;
       handleError(error, dispatch, title);

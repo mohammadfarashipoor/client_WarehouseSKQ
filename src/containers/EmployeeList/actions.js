@@ -13,7 +13,7 @@ import {
     SET_EMPLOYEE_LOADING,
     SET_EMPLOYEE_FORM_ERRORS,
     FETCH_EMPLOYEES,
-    SET_EMPLOYEE_SUBMITTING, 
+    SET_EMPLOYEE_SUBMITTING,
     PAGINATION_EMPLOYEES
 } from './constants';
 
@@ -40,7 +40,12 @@ export const handleEmployeeReset = () => {
 export const fetchHandleEmployees = (page = 1) => {
     return async (dispatch, _getState) => {
         try {
-            const response = await axios.get(`/api/employee/all/?page=${page}`);
+            let response = null
+            if (page) {
+                response = await axios.get(`/api/employee/all/?page=${page}`);
+            }else{
+                response = await axios.get(`/api/employee/all`);
+            }
             dispatch({
                 type: FETCH_EMPLOYEES,
                 payload: response.data?.employees

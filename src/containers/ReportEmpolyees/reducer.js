@@ -3,11 +3,12 @@ import {
   REPORT_FIELD_CHANGE,
   RESET_DAILY_REPORT_FORM,
   ADD_REPORT,
-  SET_REPORT_FORM_ERRORS, 
-  FILTER_FIELD_CHANGE ,
-   SET_REPORT_LOADING , 
-   DATA_FILTERED_REPORTS,
-   ADD_SUMMARY
+  SET_REPORT_FORM_ERRORS,
+  FILTER_FIELD_CHANGE,
+  SET_REPORT_LOADING,
+  DATA_FILTERED_REPORTS,
+  ADD_SUMMARY,
+  PAGINATION_REPORT
 } from "./constants";
 
 const initialState = {
@@ -17,10 +18,10 @@ const initialState = {
     date: {},
     workHours: "",
     leaveHours: 0,
-    startWorkTime:"08:00",
-    endWorkTime:"17:00",
+    startWorkTime: "08:00",
+    endWorkTime: "17:00",
     overtime: "",
-    description:""
+    description: ""
   },
   filterReportForm: {
     datePickerFilter: "",
@@ -28,7 +29,8 @@ const initialState = {
   },
   dataFilteredReports: [],
   reports: [],
-  summary:{},
+  pagination: {},
+  summary: {},
   formErrors: {},
   isLoading: false,
   selectedMonth: "",
@@ -45,6 +47,11 @@ const ReportEmpolyeesReducer = (state = initialState, action) => {
       return {
         ...state,
         dataFilteredReports: action.payload,
+      };
+    case PAGINATION_REPORT:
+      return {
+        ...state,
+        pagination: action.payload,
       };
     case RESET_DAILY_REPORT_FORM:
       return {

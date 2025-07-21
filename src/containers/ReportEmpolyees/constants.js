@@ -8,4 +8,5 @@ export const SET_REPORT_FORM_ERRORS =
   "src/ReportEmpolyees/SET_REPORT_FORM_ERRORS";
 export const FILTER_FIELD_CHANGE = "src/ReportEmpolyees/FILTER_FIELD_CHANGE";
 export const DATA_FILTERED_REPORTS = "src/ReportEmpolyees/DATA_FILTERED_REPORTS";
+export const PAGINATION_REPORT = "src/ReportEmpolyees/PAGINATION_REPORT";
 export const SET_REPORT_LOADING = "src/ReportEmpolyees/SET_REPORT_LOADING";
