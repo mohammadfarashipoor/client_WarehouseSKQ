@@ -86,14 +86,14 @@ function Notification(props) {
                     />
 
                   </label>
-                  <span className="absolute left-0 top-[14px]">{selectedIds.length!==0 && (selectedIds.length)}</span>
+                  <span className="absolute left-[-35px] top-[14px]">{selectedIds.length!==0 && `${selectedIds.length} از ${pagination.totalItems}`}</span>
                 </th>
                 {selectedIds.length ?
 
-                  <div className="absolute flex left-[10px] top-[10px]">
+                  <th className="absolute flex left-[10px] top-[10px]">
                     <button className="btn btn-sm flex gap-1 items-center flex-nowrap" onClick={readNotificationHandle}>< CheckIcon className="w-4 h-4" /> <span>خوانده شده</span></button>
                     <button className="btn btn-sm flex gap-1 items-center flex-nowrap" onClick={rmoveNotificationHandle}><TrashIcon className="w-4 h-4" /> <span>حذف</span></button>
-                    </div>
+                    </th>
                   :
                   <>
                     <th>عنوان</th>
