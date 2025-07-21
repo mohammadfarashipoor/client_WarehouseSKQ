@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 function NotificationCard(props) {
     const [expanded, setExpanded] = useState(false);
     const toggleExpand = () => setExpanded(prev => !prev);
-    const { _id, title, message, onMarkAsRead, maxLength = 30 } = props
+    const { _id, title, message, onMarkAsRead, maxLength = 50 } = props
 
     // در اینجا threshold برابر با 100 کاراکتر در نظر گرفته شده است.
     const isLong = message.length > maxLength;
@@ -17,8 +17,8 @@ function NotificationCard(props) {
         }
     };
     return (
-        <div className="card bg-base-100 shadow-lg my-4 relative">
-            <div className="card-body w-[7cm] p-0" onClick={toggleExpand}>
+        <div className="card w-full bg-base-100 shadow-lg my-4 relative">
+            <div className="card-body p-0" onClick={toggleExpand}>
                 <button
                     className="absolute top-0 left-0 transform transition-transform duration-300 p-2"
                     style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
