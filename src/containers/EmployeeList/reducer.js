@@ -9,7 +9,8 @@ import {
     EMPLOYEE_RESET, FETCH_EMPLOYEES,
     SET_EMPLOYEE_LOADING,
     SET_EMPLOYEE_FORM_ERRORS,
-    SET_EMPLOYEE_SUBMITTING
+    SET_EMPLOYEE_SUBMITTING,
+    PAGINATION_EMPLOYEES 
 } from './constants';
 
 const initialState = {
@@ -18,12 +19,14 @@ const initialState = {
         name: '',
         personalCode: '',
         position: '',
-        hourlyRate:'',
+        hourlyRate: '',
         status: false,
         contractURL: '',
         contractPath: '',
     },
     fetchEmployees: [],
+     pagination: {
+      },
     formErrors: {},
     isSubmitting: false,
     isLoading: false
@@ -40,6 +43,11 @@ const employeeReducer = (state = initialState, action) => {
             return {
                 ...state,
                 fetchEmployees: action.payload
+            };
+        case PAGINATION_EMPLOYEES:
+            return {
+                ...state,
+                pagination: action.payload
             };
         case SET_EMPLOYEE_FORM_ERRORS:
             return {
@@ -64,11 +72,12 @@ const employeeReducer = (state = initialState, action) => {
                     name: '',
                     personalCode: '',
                     position: '',
-                    hourlyRate:'',
+                    hourlyRate: '',
                     status: false,
                     contractURL: '',
                     contractPath: '',
                 },
+                pagination: {},
                 formErrors: {},
                 isSubmitting: false,
                 isLoading: false

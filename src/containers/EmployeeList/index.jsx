@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TitleCard from "@/components/TitleCard";
 import RowEmplyee from "@/components/RowEmplyee";
+import Pagination from "@/components/Pagination";
 import actions from "@/context/actions";
 import { connect } from "react-redux";
 
@@ -19,16 +20,17 @@ function EmployeeList(props) {
     newEmployeeHandle,
     handleEmployeeReset,
     editEmployeeHandle,
-    deleteEmployeeHandle
+    deleteEmployeeHandle,
+    pagination
   } = props;
 
   // کنترل نمایش مودال افزودن کارمند
   const [showAddModal, setShowAddModal] = useState(false);
   const [editMode, setEditMode] = useState(null);
-
-  useEffect(() => {
-    fetchHandleEmployees();
-  }, []);
+  const [currentPage, setPage] = useState(1);
+    useEffect(() => {
+    fetchHandleEmployees(currentPage);
+  }, [currentPage]);
   // ذخیره کارمند جدید و اضافه کردن آن به لیست
 
   const handleEditEmployeeModal = (user) => {
@@ -47,37 +49,38 @@ function EmployeeList(props) {
       titleBtn={"افزودن"}
     >
       <div className="overflow-x-auto h-[80vh]">
-        {!fetchEmployees ? <NoContent/> : (<table className="table table-xs table-pin-rows table-pin-cols">
-          <thead>
-            <tr className="z-0">
-              <th></th>
-              <th>کد</th>
-              <th>نام</th>
-              <th>سمت</th>
-              <th>وضعیت</th>
-              <th>عملیات</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fetchEmployees?.map((employee, index) => (
-              <RowEmplyee key={index} {...employee}
-                handleEditEmployeeModal={handleEditEmployeeModal}
-                deleteEmployeeHandle={deleteEmployeeHandle}
+        {!fetchEmployees ? <NoContent /> : (
+          <><table className="table table-xs table-pin-rows table-pin-cols">
+            <thead>
+              <tr className="z-0">
+                <th></th>
+                <th>کد</th>
+                <th>نام</th>
+                <th>سمت</th>
+                <th>وضعیت</th>
+                <th>عملیات</th>
+              </tr>
+            </thead>
+            <tbody>
+              {fetchEmployees?.map((employee, index) => (
+                <RowEmplyee key={index} {...employee}
+                  handleEditEmployeeModal={handleEditEmployeeModal}
+                  deleteEmployeeHandle={deleteEmployeeHandle}
 
-              />
-            ))}
-          </tbody>
-          <tfoot>
-            <tr className="z-0">
-              <th></th>
-              <th>کد</th>
-              <th>نام</th>
-              <th>سمت</th>
-              <th>وضعیت</th>
-              <th>عملیات</th>
-            </tr>
-          </tfoot>
-        </table>)}
+                />
+              ))}
+            </tbody>
+          </table>
+            <Pagination
+            className="mt-4"
+              currentPage={currentPage}
+              totalPages={pagination.totalPages}
+              onPageChange={setPage}
+              
+            />
+          </>
+        )}
+
       </div>
 
       {/* مودال افزودن کارمند جدید */}
@@ -107,6 +110,7 @@ const mapStateToProps = (state) => {
     formErrors: state.employee.formErrors,
     isLoading: state.employee.isLoading,
     isSubmitting: state.employee.isSubmitting,
+    pagination: state.employee.pagination,
   };
 };
 export default connect(mapStateToProps, actions)(EmployeeList);

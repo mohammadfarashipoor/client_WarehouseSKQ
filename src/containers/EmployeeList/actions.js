@@ -13,7 +13,8 @@ import {
     SET_EMPLOYEE_LOADING,
     SET_EMPLOYEE_FORM_ERRORS,
     FETCH_EMPLOYEES,
-    SET_EMPLOYEE_SUBMITTING
+    SET_EMPLOYEE_SUBMITTING, 
+    PAGINATION_EMPLOYEES
 } from './constants';
 
 import handleError from "@/utils/error";
@@ -36,13 +37,17 @@ export const handleEmployeeReset = () => {
     }
 
 }
-export const fetchHandleEmployees = () => {
-    return async (dispatch, getState) => {
+export const fetchHandleEmployees = (page = 1) => {
+    return async (dispatch, _getState) => {
         try {
-            const response = await axios.get("/api/employee/all");
+            const response = await axios.get(`/api/employee/all/?page=${page}`);
             dispatch({
                 type: FETCH_EMPLOYEES,
                 payload: response.data?.employees
+            })
+            dispatch({
+                type: PAGINATION_EMPLOYEES,
+                payload: response.data?.pagination
             })
         } catch (error) {
             const title = `در دریافت کارکنان مشکلی رخ داده دوباره تلاش کنید`;
@@ -115,7 +120,7 @@ export const editEmployeeHandle = employeeId => {
         return dispatch(saveEmployee('patch', `/api/employee/edit/${employeeId}`, editEmployee))
     }
 }
-export const deleteEmployeeHandle = (employeeId,key) => {
+export const deleteEmployeeHandle = (employeeId, key) => {
     return async (dispatch, getState) => {
         try {
             const response = await axios.delete(`/api/employee/delete/${employeeId}`);
