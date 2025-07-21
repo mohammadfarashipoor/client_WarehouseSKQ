@@ -5,14 +5,23 @@ import SuspenseContent from "../../components/SuspenseContent";
 import RowNotification from "../../components/RowNotification";
 import { CheckIcon, TrashIcon } from "@heroicons/react/24/outline";
 import NoContent from "../../components/NoContent";
+import Pagination from "@/components/Pagination";
 
 function Notification(props) {
-  const { notifications, isLoading, fetchNotificationHandle, markAsReadNotificationHandle, deleteNotificationHandle } = props;
+  const {
+    notifications,
+    isLoading,
+    fetchNotificationHandle,
+    markAsReadNotificationHandle,
+    deleteNotificationHandle,
+    pagination
+  } = props;
   const [selectedIds, setSelectedIds] = useState([]);
+  const [currentPage, setPage] = useState(1);
 
   useEffect(() => {
-    fetchNotificationHandle();
-  }, []);
+    fetchNotificationHandle(currentPage);
+  }, [currentPage]);
 
   // آیا همه سطرها انتخاب شده‌اند؟
   const allSelected =
@@ -62,12 +71,12 @@ function Notification(props) {
   return (
     <div className="overflow-x-auto">
       {isLoading ? <SuspenseContent /> :
-        notifications ? <NoContent message="اعلانی یافت نشد"/> :
-          (<table className="table">
+        !notifications ? <NoContent message="اعلانی یافت نشد" /> :
+          (<><table className="table">
             {/* head */}
             <thead>
-              <tr>
-                <th className="flex items-center justify-center gap-1 ">
+              <tr className="relative">
+                <th className="relative flex items-center justify-center gap-1 ">
                   <label>
                     <input
                       type="checkbox"
@@ -77,15 +86,15 @@ function Notification(props) {
                     />
 
                   </label>
-
+                  <span className="absolute left-0 top-[14px]">{selectedIds.length!==0 && (selectedIds.length)}</span>
                 </th>
                 {selectedIds.length ?
-                  <>
-                    <th></th>
-                    <th></th>
-                    <th ><button className="btn btn-sm flex gap-1 items-center flex-nowrap" onClick={readNotificationHandle}>< CheckIcon className="w-4 h-4" /> <span>خوانده شده</span></button></th>
-                    <th ><button className="btn btn-sm flex gap-1 items-center flex-nowrap" onClick={rmoveNotificationHandle}><TrashIcon className="w-4 h-4" /> <span>حذف</span></button></th>
-                  </> :
+
+                  <div className="absolute flex left-[10px] top-[10px]">
+                    <button className="btn btn-sm flex gap-1 items-center flex-nowrap" onClick={readNotificationHandle}>< CheckIcon className="w-4 h-4" /> <span>خوانده شده</span></button>
+                    <button className="btn btn-sm flex gap-1 items-center flex-nowrap" onClick={rmoveNotificationHandle}><TrashIcon className="w-4 h-4" /> <span>حذف</span></button>
+                    </div>
+                  :
                   <>
                     <th>عنوان</th>
                     <th>پیام</th>
@@ -106,7 +115,15 @@ function Notification(props) {
                 />
               ))}
             </tbody>
-          </table>)
+          </table>
+            <Pagination
+              className="mt-4"
+              currentPage={currentPage}
+              totalPages={pagination.totalPages}
+              onPageChange={(page)=>{setSelectedIds([]);setPage(page)}}
+
+            />
+          </>)
       }
     </div>
   );
@@ -116,6 +133,8 @@ const mapStateToProps = (state) => {
   return {
     notifications: state.notification.notifications,
     isLoading: state.notification.isLoading,
+    pagination: state.notification.pagination,
+
   };
 };
 export default connect(mapStateToProps, actions)(Notification);

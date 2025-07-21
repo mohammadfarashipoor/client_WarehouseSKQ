@@ -1,14 +1,18 @@
-import { FETCH_NOTIFICATION, FETCH_NOTIFICATION_ACTIVE } from "./constants";
+import { FETCH_NOTIFICATION, FETCH_NOTIFICATION_ACTIVE ,PAGINATION_NOTIFICATION} from "./constants";
 import handleError from "../../utils/error";
 import axios from "axios";
 
-export const fetchNotificationHandle = () => {
+export const fetchNotificationHandle = (page = 1) => {
     return async (dispatch, getState) => {
         try {
-            const response = await axios.get("/api/notification/all");
+            const response = await axios.get(`/api/notification/all?page=${page}`);
             dispatch({
                 type: FETCH_NOTIFICATION,
                 payload: response.data?.notifications
+            })
+            dispatch({
+                type: PAGINATION_NOTIFICATION,
+                payload: response.data?.pagination
             })
         } catch (error) {
             const title = `در دریافت اعلان ها مشکلی رخ داده دوباره تلاش کنید`;
