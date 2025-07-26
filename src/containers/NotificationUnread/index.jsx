@@ -27,12 +27,12 @@ function NotificationUnread(props) {
             </div>
         </label>
       </div>
-      <div className="drawer-side reletive overflow-hidden h-[92vh] top-auto bottom-px">
+      <div className="drawer-side reletive overflow-hidden h-[91vh] top-auto bottom-px">
         <label htmlFor="notification-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
-        <ul className="menu w-[50%] flex-nowrap overflow-y-scroll overflow-x-hidden bg-base-200 text-base-content min-h-full w-80 p-4">
+        <ul className="menu flex-nowrap overflow-y-scroll overflow-x-hidden bg-base-200 text-base-content min-h-full p-4  w-[85%] md:w-auto">
           <li><Link className="bg-base-300 p-2 reounded w-[98%] block w-full text-center" onClick={closeDrawer} to={"/notification"}>مشاهده همه</Link></li>
           {!notificationsActive ? <NoContent /> : notificationsActive.map((notif, index) => (
-            <li><NotificationCard key={notif._id} onMarkAsRead={(_id) => { markAsReadNotificationHandle(_id) }} {...notif} /></li>
+            <li key={notif._id}><NotificationCard  onMarkAsRead={(_id) => { markAsReadNotificationHandle(_id) }} {...notif} /></li>
           ))}
 
         </ul>

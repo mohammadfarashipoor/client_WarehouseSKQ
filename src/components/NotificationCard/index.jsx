@@ -17,8 +17,8 @@ function NotificationCard(props) {
         }
     };
     return (
-        <div className="card w-full bg-base-100 shadow-lg my-4 relative">
-            <div className="card-body p-0" onClick={toggleExpand}>
+        <div className="card  bg-base-100 shadow-lg my-4 relative" onClick={toggleExpand}>
+            <div className="card-body w-auto p-0 md:w-[35vw]" >
                 <button
                     className="absolute top-0 left-0 transform transition-transform duration-300 p-2"
                     style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
