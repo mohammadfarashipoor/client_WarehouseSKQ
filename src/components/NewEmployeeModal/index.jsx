@@ -38,7 +38,7 @@ function NewEmployeeModal(props) {
             } else {
                 isErrorFeild = await newEmployeeHandle()
             }
-            if (isErrorFeild) {
+            if (!isErrorFeild) {
                 setShowAddModal(false);
             }
             handleSubmitingStatus(false)
@@ -62,7 +62,7 @@ function NewEmployeeModal(props) {
         <div
             className="modal modal-open "
             onClick={(e) => {
-                if (e.target === e.currentTarget) setShowAddModal(false);
+                if (e.target === e.currentTarget) closeModalEmployee();
             }}
         >
             <div className="modal-box relative">

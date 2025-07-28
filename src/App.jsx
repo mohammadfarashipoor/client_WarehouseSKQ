@@ -8,6 +8,7 @@ import { Suspense } from "react";
 import Toast from "./containers/Toast";
 import setToken from "./utils/token";
 import { SET_AUTH } from "./containers/Authentication/constants";
+import './App.css'
 
 const token = localStorage.getItem("token");
 setToken(token);

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import TitleCard from "@/components/TitleCard";
-import InputText from "@/components/Input/InputText";
 import actions from "@/context/actions";
 import { connect } from "react-redux";
-import RowCustomer from "../../components/RowCustomer";
+import RowCustomer from "@/components/RowCustomer";
+import NoContent from "@/components/NoContent";
+import Pagination from "@/components/Pagination";
+import NewCustomerModal from "../../components/NewCustomerModal";
+
 function CustomersList(props) {
-  const {
-    newCustomerFormData,
+  const { newCustomerFormData,
     fetchCustomers,
     formErrors,
     fetchHandleCustomers,
@@ -14,18 +16,32 @@ function CustomersList(props) {
     newCustomerChange,
     isSubmitting,
     newCustomerHandle,
+    pagination,
+    editCustomerHandle,
+    deletCustomerHandle,
+    resetCustomerHandle
   } = props;
 
   // کنترل نمایش مودال افزودن کارمند
   const [showAddModal, setShowAddModal] = useState(false);
+  const [editMode, setEditMode] = useState(null);
+  const [currentPage, setPage] = useState(1);
+  // const [location, setLocation] = useState(null);
+  // const [address, setAddress] = useState("");
+
   useEffect(() => {
-    fetchHandleCustomers();
-  }, []);
+    fetchHandleCustomers(currentPage);
+  }, [currentPage]);
+  // useEffect(() => {
+  //   newCustomerChange("address", address)
+  //   newCustomerChange("location", location)
+  // }, [location]);
   // ذخیره کارمند جدید و اضافه کردن آن به لیست
-  const handleAddNewCustomer = () => {
-    newCustomerHandle();
-    if (!formErrors && !formErrors[0]) {
-      setShowAddModal(false);
+  const handleEditCustomerModal = (user) => {
+    setShowAddModal(true)
+    setEditMode(true)
+    for (let info in user) {
+      newCustomerChange(info, user[info])
     }
   };
   return (
@@ -37,111 +53,53 @@ function CustomersList(props) {
         titleBtn={"افزودن مشتری جدید"}
       >
         <div className="overflow-x-auto h-[80vh]">
-          <table className="table table-xs table-pin-rows table-pin-cols">
-            <thead>
-              <tr className="z-0">
-                <th></th>
-                <th>کد</th>
-                <th>نام</th>
-                <th>تلفن</th>
-                <th>آدرس</th>
-                <th>عملیات</th>
-              </tr>
-            </thead>
-            <tbody>
-              {fetchCustomers?.map((customer, index) => (
-                <RowCustomer key={index} {...customer} />
-              ))}
-            </tbody>
-            <tfoot>
-              <tr className="z-0">
-                <th></th>
-                <th>کد</th>
-                <th>نام</th>
-                <th>تلفن</th>
-                <th>آدرس</th>
-                <th>عملیات</th>
-              </tr>
-            </tfoot>
-          </table>
+          {!fetchCustomers.length ? <NoContent /> : (<>
+            <table className="table table-xs table-pin-rows table-pin-cols">
+              <thead>
+                <tr className="z-0">
+                  <th></th>
+                  <th>کد</th>
+                  <th>نام</th>
+                  <th>تلفن</th>
+                  <th>آدرس</th>
+                  <th>عملیات</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fetchCustomers?.map((customer, index) => (
+                  <RowCustomer
+                    key={index}
+                    handleEditCustomerModal={handleEditCustomerModal}
+                    deletCustomerHandle={deletCustomerHandle}
+                    {...customer} />
+                ))}
+              </tbody>
+            </table>
+            <Pagination
+              className="mt-4"
+              currentPage={currentPage}
+              totalPages={pagination.totalPages}
+              onPageChange={setPage}
+
+            /></>
+          )}
+
         </div>
 
         {showAddModal && (
-          <div
-            className="modal modal-open "
-            onClick={(e) => {
-              if (e.target === e.currentTarget) setShowAddModal(false);
-            }}
-          >
-            <div className="modal-box relative">
-              <h3 className="font-bold text-lg mb-4">افزودن مشتری جدید</h3>
-              <InputText
-                type="text"
-                error={formErrors["personalCode"]}
-                placeholder={"کد مشتری"}
-                name={"personalCode"}
-                containerStyle="mt-4"
-                label={"کد پرسنلی"}
-                value={newCustomerFormData.personalCode}
-                onInputChange={(name, value) => {
-                  newCustomerChange(name, value);
-                }}
-                disableValue={isSubmitting}
-              />
-              <InputText
-                type="text"
-                error={formErrors["name"]}
-                placeholder={"نام مشتری"}
-                name={"name"}
-                containerStyle="mt-4"
-                label={"نام"}
-                value={newCustomerFormData.name}
-                onInputChange={(name, value) => {
-                  newCustomerChange(name, value);
-                }}
-                disableValue={isSubmitting}
-              />
-              <InputText
-                type="text"
-                error={formErrors["phoneNumber"]}
-                placeholder={"مثلاً 0911123456"}
-                name={"phoneNumber"}
-                containerStyle="mt-4"
-                label={"تلفن"}
-                value={newCustomerFormData.phoneNumber}
-                onInputChange={(name, value) => {
-                  newCustomerChange(name, value);
-                }}
-                disableValue={isSubmitting}
-              />
-              <InputText
-                type="text"
-                error={formErrors["address"]}
-                placeholder={"تهران"}
-                name={"address"}
-                containerStyle="mt-4"
-                label={"آدرس"}
-                value={newCustomerFormData.address}
-                onInputChange={(name, value) => {
-                  newCustomerChange(name, value);
-                }}
-                disableValue={isSubmitting}
-              />
-
-              <div className="modal-action gap-2">
-                <button className="btn" onClick={() => setShowAddModal(false)}>
-                  انصراف
-                </button>
-                <button
-                  className={`btn btn-primary ${isLoading ? " loading" : ""}`}
-                  disabled={isSubmitting}
-                  onClick={handleAddNewCustomer}
-                >
-                  ذخیره
-                </button>
-              </div>
-            </div>
-          </div>
+          <NewCustomerModal
+            editMode={editMode}
+            newCustomerFormData={newCustomerFormData}
+            formErrors={formErrors}
+            isLoading={isLoading}
+            newCustomerChange={newCustomerChange}
+            isSubmitting={isSubmitting}
+            newCustomerHandle={newCustomerHandle}
+            setShowAddModal={setShowAddModal}
+            setEditMode={setEditMode}
+            editCustomerHandle={editCustomerHandle}
+            resetCustomerHandle={resetCustomerHandle}
+          />
         )}
       </TitleCard>
     </main>
@@ -154,6 +112,8 @@ const mapStateToProps = (state) => {
     formErrors: state.customer.formErrors,
     isLoading: state.customer.isLoading,
     isSubmitting: state.customer.isSubmitting,
+    pagination: state.customer.pagination,
+
   };
 };
 export default connect(mapStateToProps, actions)(CustomersList);

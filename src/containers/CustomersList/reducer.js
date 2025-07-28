@@ -6,22 +6,26 @@
 
 import {
     CUSTOMER_CHANGE,
-    CUSTOMER_RESET,FETCH_CUSTOMERS ,
+    CUSTOMER_RESET, FETCH_CUSTOMERS,
     SET_CUSTOMER_LOADING,
     SET_CUSTOMER_FORM_ERRORS,
-    SET_CUSTOMER_SUBMITTING
+    SET_CUSTOMER_SUBMITTING,
+    PAGINATION_CUSTOMERS
 } from './constants';
-
 const initialState = {
     newCustomerFormData: {
-        name: '', 
+        name: '',
         personalCode: '',
-        phoneNumber: '',
+        status: false,
+        mobile: '',
         address: '',
-        records: '',
+        location: { coordinates: [0, 0] },
+        contractURL: 'test',
+        contractPath: 'test',
     },
     fetchCustomers: [],
     formErrors: {},
+    pagination: {},
     isSubmitting: false,
     isLoading: false
 };
@@ -48,6 +52,11 @@ const customerReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: action.payload
             };
+        case PAGINATION_CUSTOMERS:
+            return {
+                ...state,
+                pagination: action.payload
+            };
         case SET_CUSTOMER_SUBMITTING:
             return {
                 ...state,
@@ -57,15 +66,10 @@ const customerReducer = (state = initialState, action) => {
             return {
                 ...state,
                 newCustomerFormData: {
-                    name: '',
-                    personalCode: '',
-                    position: '',
-                    dateStart: '',
-                    status: false,
-                    contractURL: '',
-                    records: '',
+                    ...initialState.newCustomerFormData
                 },
                 formErrors: {},
+                pagination: {},
                 isSubmitting: false,
                 isLoading: false
             };
