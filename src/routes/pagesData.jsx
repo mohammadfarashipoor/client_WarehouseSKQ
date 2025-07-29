@@ -69,12 +69,12 @@ export const HomePagesData = [
   {
     path: "/customers",
     icon: <ShoppingBagIcon className={iconClasses} />,
-    title: "مشتریان",
+    title: "خریداران",
     submenu: [
       {
         path: "/customers/list",
         icon: <UsersIcon className={submenuIconClasses} />,
-        title: "لیست مشتریان",
+        title: "لیست خریداران",
         element: <HomeLayout children={<CustomersList />} />,
       },
     ],

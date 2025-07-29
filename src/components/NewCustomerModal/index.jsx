@@ -53,11 +53,11 @@ function NewCustomerModal(props) {
             }}
         >
             <div className="modal-box relative">
-                <h3 className="font-bold text-lg mb-4">افزودن کارمند جدید</h3>
+                <h3 className="font-bold text-lg mb-4">افزودن خریدار جدید</h3>
                 <InputText
                     type="text"
                     error={formErrors["personalCode"]}
-                    placeholder={"کد مشتری"}
+                    placeholder={"کد خریدار"}
                     name={"personalCode"}
                     containerStyle="mt-4"
                     label={"کد پرسنلی"}
@@ -70,7 +70,7 @@ function NewCustomerModal(props) {
                 <InputText
                     type="text"
                     error={formErrors["name"]}
-                    placeholder={"نام مشتری"}
+                    placeholder={"نام خریدار"}
                     name={"name"}
                     containerStyle="mt-4"
                     label={"نام"}

@@ -43,10 +43,10 @@ function CustomersList(props) {
   return (
     <main className="flex-1 overflow-y-auto bg-base-200 py-4 px-6">
       <TitleCard
-        title="لیست مشتریان"
+        title="لیست خریداران"
         leftBtn={true}
         handleBtn={() => setShowAddModal(true)}
-        titleBtn={"افزودن مشتری جدید"}
+        titleBtn={"افزودن"}
       >
         <div className="overflow-x-auto h-[80vh]">
           {!fetchCustomers.length ? <NoContent /> : (<>

@@ -6,6 +6,10 @@ function RowCustomer({ _id, personalCode, mobile, name, address, status, locatio
   const handleEdit = () => {
     handleEditCustomerModal({ _id, personalCode, mobile, name, address, location, status })
   }
+  function deleteHandle(){
+    deletCustomerHandle(_id)
+     document.getElementById('modalDelete').close()
+  }
   return (
     <tr>
       <th></th>
@@ -40,7 +44,7 @@ function RowCustomer({ _id, personalCode, mobile, name, address, status, locatio
           <div className="flex flex-col text-center gap-2">
             <p className="text-base">{name ? `آیا از حذف ${name} اطمینان دارید؟ ` : `آیا از حذف اطمینان دارید؟ `}</p>
             <div className="flex justify-center gap-2">
-              <button className="btn btn-outline btn-error" onClick={() => deletCustomerHandle(_id)}>حذف</button>
+              <button className="btn btn-outline btn-error" onClick={deleteHandle }>حذف</button>
               <button className="btn" onClick={() => document.getElementById('modalDelete').close()} >انصراف</button>
             </div>
           </div>

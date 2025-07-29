@@ -83,7 +83,7 @@ export const saveCustomer = (method, url, formData) => {
                 data: formData
             });
             const firstName = response?.data?.customer.name;
-            toast.success(`${firstName ? ` ${firstName}` : ""}, مشتری جدید اضافه شد`);
+            toast.success(`${firstName ? ` ${firstName}` : ""}, خریدار جدید اضافه شد`);
             dispatch(resetCustomerHandle());
             dispatch(fetchHandleCustomers());
 
