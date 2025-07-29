@@ -1,9 +1,10 @@
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import ModalBox from "../ModalBox";
+import MapLink from "../MapLink";
 
-function RowCustomer({ _id, personalCode, mobile, name, address, status, handleEditCustomerModal, deletCustomerHandle }) {
+function RowCustomer({ _id, personalCode, mobile, name, address, status, location, handleEditCustomerModal, deletCustomerHandle }) {
   const handleEdit = () => {
-    handleEditCustomerModal({ _id, personalCode, mobile, name, address, status })
+    handleEditCustomerModal({ _id, personalCode, mobile, name, address, location, status })
   }
   return (
     <tr>
@@ -18,7 +19,7 @@ function RowCustomer({ _id, personalCode, mobile, name, address, status, handleE
           <span className="block btn-circle w-2 h-2 bg-red-700"></span>
         )}
       </td>
-      <td>{address}</td>
+      <td><MapLink lat={location.coordinates[0]} lng={location.coordinates[1]}>{address}</MapLink></td>
 
       <td className="">
         <div className="dropdown dropdown-end ">

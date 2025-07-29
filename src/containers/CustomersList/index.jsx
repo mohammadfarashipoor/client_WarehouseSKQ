@@ -26,16 +26,12 @@ function CustomersList(props) {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editMode, setEditMode] = useState(null);
   const [currentPage, setPage] = useState(1);
-  // const [location, setLocation] = useState(null);
-  // const [address, setAddress] = useState("");
+
 
   useEffect(() => {
     fetchHandleCustomers(currentPage);
   }, [currentPage]);
-  // useEffect(() => {
-  //   newCustomerChange("address", address)
-  //   newCustomerChange("location", location)
-  // }, [location]);
+
   // ذخیره کارمند جدید و اضافه کردن آن به لیست
   const handleEditCustomerModal = (user) => {
     setShowAddModal(true)
@@ -61,6 +57,7 @@ function CustomersList(props) {
                   <th>کد</th>
                   <th>نام</th>
                   <th>تلفن</th>
+                  <th>وضعیت</th>
                   <th>آدرس</th>
                   <th>عملیات</th>
                 </tr>

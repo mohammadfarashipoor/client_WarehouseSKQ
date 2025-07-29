@@ -1,6 +1,8 @@
 import InputCheckBox from "../../components/Input/InputCheckBox";
 import InputText from "@/components/Input/InputText";
+import CoordinatePicker from "@/components/CoordinatePicker";
 import Textarea from "@/components/Input/Textarea";
+import { useEffect, useState } from "react";
 
 
 function NewCustomerModal(props) {
@@ -16,6 +18,10 @@ function NewCustomerModal(props) {
         editCustomerHandle,
         resetCustomerHandle,
     } = props;
+    const [address, setAddress] = useState("");
+    useEffect(() => {
+        newCustomerChange("address", address)
+    }, [address, newCustomerFormData.location]);
     const handleAddNewEmployee = async () => {
         try {
 
@@ -87,16 +93,18 @@ function NewCustomerModal(props) {
                     }}
                     disableValue={isSubmitting}
                 />
-                {/* <div className="mt-4">
-                <label className="block mb-2">مختصات جغرافیایی</label>
-                <CoordinatePicker
-                  value={location}
-                  onChange={setLocation}
-                  onAddressChange={setAddress}
-                  width="100%"
-                  height="350px"
-                />
-              </div> */}
+                <div className="mt-4">
+                    <label className="block mb-2">مختصات جغرافیایی</label>
+                    <CoordinatePicker
+                        value={newCustomerFormData.location.coordinates.coordinates}
+                        onChange={(value) => {
+                            newCustomerChange("location", value);
+                        }}
+                        onAddressChange={setAddress}
+                        width="100%"
+                        height="350px"
+                    />
+                </div>
                 <Textarea
                     type="text"
                     error={formErrors["address"]}
@@ -120,7 +128,7 @@ function NewCustomerModal(props) {
                         newCustomerChange(name, value);
                     }}
                     disableValue={isSubmitting}
-                /> 
+                />
                 <div className="modal-action gap-2">
                     <button className="btn" onClick={closeModalCustomer}>
                         انصراف

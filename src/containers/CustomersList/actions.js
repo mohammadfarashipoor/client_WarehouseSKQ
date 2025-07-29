@@ -17,7 +17,11 @@ import { allFieldsValidation } from "@/utils/validation";
 
 export const newCustomerChange = (name, value) => {
     let formData = {};
-    formData[name] = value;
+    if (name === "location") {
+        formData["location"] = { coordinates: value };
+    } else {
+        formData[name] = value;
+    }
 
     return {
         type: CUSTOMER_CHANGE,
@@ -82,7 +86,7 @@ export const saveCustomer = (method, url, formData) => {
             toast.success(`${firstName ? ` ${firstName}` : ""}, مشتری جدید اضافه شد`);
             dispatch(resetCustomerHandle());
             dispatch(fetchHandleCustomers());
-            
+
         } catch (error) {
             const title = `مشکلی رخ داده دوباره تلاش کنید`;
             handleError(error, dispatch, title);

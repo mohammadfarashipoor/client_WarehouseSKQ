@@ -19,7 +19,7 @@ const initialState = {
         status: false,
         mobile: '',
         address: '',
-        location: { coordinates: [0, 0] },
+        location: { coordinates: [35.6892, 51.3890] },
         contractURL: 'test',
         contractPath: 'test',
     },
